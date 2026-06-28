@@ -1,0 +1,55 @@
+# ============================================================
+# MediAssist AI - requirements.txt
+# Install: pip install -r requirements.txt
+# SQLite use ho rahi hai — koi extra DB install nahi
+# ============================================================
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# --- Core Web Framework ---
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-multipart==0.0.9
+
+# --- Authentication ---
+python-jose[cryptography]==3.3.0
+bcrypt>=4.0.1
+pydantic[email]>=2.7.4
+
+# --- Database (SQLite - built into Python, no install needed) ---
+sqlalchemy==2.0.30
+alembic==1.13.1
+
+# --- AI / LLM (Core) ---
+langchain>=0.3.0,<0.4.0
+langchain-openai>=0.2.0,<0.4.0
+langchain-community>=0.3.0,<0.4.0
+openai>=1.30.1
+
+# --- LangGraph (Multi-Agent Workflow) ---
+langgraph>=0.2.76
+
+# --- Document Loaders ---
+pypdf==4.2.0
+tiktoken==0.7.0
+
+# --- Utilities ---
+python-dotenv==1.0.1
+httpx==0.27.0
+aiofiles==23.2.1
+jinja2
+
+# --- Static file serving ---
+# (built into FastAPI via Starlette)
+
+# ============================================================
+# OPTIONAL - Heavy packages (install separately if needed)
+# ============================================================
+chromadb==0.5.0
+sentence-transformers==3.0.0
+easyocr==1.7.1
+Pillow==10.3.0
+PyMuPDF==1.24.4
+openai-whisper
+pydub==0.25.1
+streamlit>=1.39.0
+plotly==5.22.0
