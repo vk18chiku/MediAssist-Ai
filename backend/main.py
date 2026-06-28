@@ -16,7 +16,7 @@ from graph.workflow import app as langgraph_app
 
 # Agents
 from agents.report_summarizer_agent import summarize_report
-from agents.voice_agent import transcribe_audio
+
 
 # Create all tables (including new Appointment table)
 models.Base.metadata.create_all(bind=engine)
@@ -262,15 +262,7 @@ def upload_report(file: UploadFile = File(...)):
     summary = summarize_report(file_path)
     return {"summary": summary}
 
-# ── VOICE UPLOAD ENDPOINT ──
-@app.post("/voice/upload")
-def upload_voice(file: UploadFile = File(...)):
-    os.makedirs("./uploads", exist_ok=True)
-    file_path = f"./uploads/{file.filename}"
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    transcription = transcribe_audio(file_path)
-    return {"text": transcription.get("text", "Error processing audio.")}
+
 
 # ── DOCTORS LIST ENDPOINT ──
 @app.get("/doctors")
