@@ -1,7 +1,7 @@
 # backend/main.py
 import os
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta
 from fastapi import FastAPI, UploadFile, File, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
@@ -55,6 +55,19 @@ class DoctorProfileUpdate(BaseModel):
     contact_number: Optional[str] = None
     bio: Optional[str] = None
 
+class PatientProfileUpdate(BaseModel):
+    age: Optional[str] = None
+    gender: Optional[str] = None
+    height: Optional[str] = None
+    weight: Optional[str] = None
+    blood_group: Optional[str] = None
+    phone_number: Optional[str] = None
+    address: Optional[str] = None
+    emergency_contact: Optional[str] = None
+    medical_history: Optional[str] = None
+    allergies: Optional[str] = None
+    existing_diseases: Optional[str] = None
+
 # ── ROOT ──
 @app.get("/")
 def read_root():
@@ -80,7 +93,7 @@ def delete_chat_session(session_id: int, db: Session = Depends(get_db)):
 # ── CHAT ENDPOINT ──
 @app.post("/chat")
 def chat_with_ai(req: ChatRequest, db: Session = Depends(get_db)):
-    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    now_str = (datetime.utcnow() + timedelta(hours=5, minutes=30)).strftime("%Y-%m-%d %H:%M:%S")
     
     session_id = req.session_id
     if not session_id:
@@ -117,7 +130,7 @@ def chat_with_ai(req: ChatRequest, db: Session = Depends(get_db)):
     
     ai_response = result["response"]
     
-    ai_msg = models.ChatMessage(session_id=session_id, role="assistant", content=ai_response, timestamp=datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    ai_msg = models.ChatMessage(session_id=session_id, role="assistant", content=ai_response, timestamp=(datetime.utcnow() + timedelta(hours=5, minutes=30)).strftime("%Y-%m-%d %H:%M:%S"))
     db.add(ai_msg)
     db.commit()
 
@@ -140,16 +153,43 @@ def create_appointment(req: AppointmentCreateRequest, db: Session = Depends(get_
         date=req.date,
         time=req.time,
         status="pending",
-        created_at=datetime.now().strftime("%Y-%m-%d %H:%M")
+        created_at=(datetime.utcnow() + timedelta(hours=5, minutes=30)).strftime("%Y-%m-%d %H:%M")
     )
     db.add(appt)
     db.commit()
     db.refresh(appt)
+    
+    if appt.doctor_email:
+        send_real_email(
+            appt.doctor_email,
+            "🛎️ New Appointment Request - MediAssist AI",
+            f"Hello Dr. {appt.doctor_name},\n\nYou have received a new appointment request from {appt.patient_name}.\n\n"
+            f"📅 Date: {appt.date}\n⏰ Time: {appt.time}\n\n"
+            f"Please log in to your MediAssist dashboard to Accept or Reject this request.\n\nRegards,\nMediAssist AI"
+        )
+        
     return {"id": appt.id, "status": "pending"}
+
+def cleanup_past_appointments(db: Session):
+    """Deletes appointments where the date and time have already passed."""
+    now = (datetime.utcnow() + timedelta(hours=5, minutes=30))
+    appts = db.query(models.Appointment).all()
+    deleted = False
+    for a in appts:
+        try:
+            appt_dt = datetime.strptime(f"{a.date} {a.time}", "%Y-%m-%d %H:%M")
+            if appt_dt < now:
+                db.delete(a)
+                deleted = True
+        except ValueError:
+            pass
+    if deleted:
+        db.commit()
 
 @app.get("/appointments/pending")
 def get_pending_appointments(doctor_email: str, db: Session = Depends(get_db)):
     """Fetch all pending appointment requests for a specific doctor."""
+    cleanup_past_appointments(db)
     appts = db.query(models.Appointment).filter(
         models.Appointment.doctor_email == doctor_email,
         models.Appointment.status == "pending"
@@ -170,23 +210,12 @@ def get_pending_appointments(doctor_email: str, db: Session = Depends(get_db)):
 @app.get("/appointments/accepted")
 def get_accepted_appointments(doctor_email: str, db: Session = Depends(get_db)):
     """Fetch all accepted upcoming appointments for a specific doctor."""
+    cleanup_past_appointments(db)
     appts = db.query(models.Appointment).filter(
         models.Appointment.doctor_email == doctor_email,
         models.Appointment.status == "accepted"
     ).all()
     
-    upcoming = []
-    now = datetime.now()
-    for a in appts:
-        try:
-            # Try to parse date and time to filter past appointments
-            appt_dt = datetime.strptime(f"{a.date} {a.time}", "%Y-%m-%d %H:%M")
-            if appt_dt >= now:
-                upcoming.append(a)
-        except ValueError:
-            # If time format is not standard (e.g. 'Tomorrow', '10 AM'), keep it safely
-            upcoming.append(a)
-
     return [
         {
             "id": a.id,
@@ -195,7 +224,7 @@ def get_accepted_appointments(doctor_email: str, db: Session = Depends(get_db)):
             "date": a.date,
             "time": a.time,
         }
-        for a in upcoming
+        for a in appts
     ]
 
 @app.post("/appointments/{appointment_id}/accept")
@@ -323,3 +352,92 @@ def update_doctor_profile(doctor_email: str, req: DoctorProfileUpdate, db: Sessi
         
     db.commit()
     return {"message": "Profile updated successfully"}
+
+# ── PATIENT PROFILE ENDPOINTS ──
+@app.get("/patients/profile")
+def get_patient_profile(patient_email: str, db: Session = Depends(get_db)):
+    patient = db.query(models.Patient, models.User.name, models.User.email)\
+               .join(models.User, models.Patient.user_id == models.User.id)\
+               .filter(models.User.email == patient_email).first()
+    if not patient:
+        user = db.query(models.User).filter(models.User.email == patient_email).first()
+        if user and user.role == "patient":
+            new_patient = models.Patient(user_id=user.id)
+            db.add(new_patient)
+            db.commit()
+            db.refresh(new_patient)
+            return {
+                "name": user.name, "email": user.email, "profile_completed": False,
+                "age": None, "gender": None, "height": None, "weight": None, "blood_group": None,
+                "phone_number": None, "address": None, "emergency_contact": None,
+                "medical_history": None, "allergies": None, "existing_diseases": None
+            }
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404, detail="Patient not found")
+    
+    return {
+        "name": patient.name,
+        "email": patient.email,
+        "profile_completed": bool(patient[0].profile_completed),
+        "age": patient[0].age,
+        "gender": patient[0].gender,
+        "height": patient[0].height,
+        "weight": patient[0].weight,
+        "blood_group": patient[0].blood_group,
+        "phone_number": patient[0].phone_number,
+        "address": patient[0].address,
+        "emergency_contact": patient[0].emergency_contact,
+        "medical_history": patient[0].medical_history,
+        "allergies": patient[0].allergies,
+        "existing_diseases": patient[0].existing_diseases
+    }
+
+@app.post("/patients/profile")
+def update_patient_profile(patient_email: str, req: PatientProfileUpdate, db: Session = Depends(get_db)):
+    patient = db.query(models.Patient)\
+               .join(models.User, models.Patient.user_id == models.User.id)\
+               .filter(models.User.email == patient_email).first()
+    if not patient:
+        user = db.query(models.User).filter(models.User.email == patient_email).first()
+        if user and user.role == "patient":
+            patient = models.Patient(user_id=user.id)
+            db.add(patient)
+        else:
+            from fastapi import HTTPException
+            raise HTTPException(status_code=404, detail="Patient not found")
+    
+    if req.age is not None: patient.age = req.age
+    if req.gender is not None: patient.gender = req.gender
+    if req.height is not None: patient.height = req.height
+    if req.weight is not None: patient.weight = req.weight
+    if req.blood_group is not None: patient.blood_group = req.blood_group
+    if req.phone_number is not None: patient.phone_number = req.phone_number
+    if req.address is not None: patient.address = req.address
+    if req.emergency_contact is not None: patient.emergency_contact = req.emergency_contact
+    if req.medical_history is not None: patient.medical_history = req.medical_history
+    if req.allergies is not None: patient.allergies = req.allergies
+    if req.existing_diseases is not None: patient.existing_diseases = req.existing_diseases
+    
+    patient.profile_completed = 1
+    db.commit()
+    return {"message": "Patient Profile updated successfully"}
+
+@app.get("/appointments/patient")
+def get_patient_appointments(patient_email: str, db: Session = Depends(get_db)):
+    cleanup_past_appointments(db)
+    appts = db.query(models.Appointment).filter(
+        models.Appointment.patient_email == patient_email
+    ).order_by(models.Appointment.id.desc()).all()
+    
+    return [
+        {
+            "id": a.id,
+            "doctor_name": a.doctor_name,
+            "date": a.date,
+            "time": a.time,
+            "status": a.status,
+            "rejection_reason": a.rejection_reason,
+            "created_at": a.created_at
+        }
+        for a in appts
+    ]

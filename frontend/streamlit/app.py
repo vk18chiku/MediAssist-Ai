@@ -6,7 +6,7 @@ import base64
 import platform
 import time
 
-st.set_page_config(page_title="MediAssist AI", page_icon="🧠", layout="wide")
+st.set_page_config(page_title="MediAssist AI", page_icon="🧠", layout="wide", initial_sidebar_state="expanded")
 
 # --- API Configuration ---
 if platform.system() == "Windows":
@@ -33,71 +33,70 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 :root {
-    --bg-void: #05060b;
-    --bg-deep: #0a0d14;
-    --bg-surface: #0f1219;
-    --bg-elevated: #151923;
-    --bg-card: rgba(15, 18, 25, 0.80);
-    --bg-card-hover: rgba(21, 25, 35, 0.95);
-    --border-dim: rgba(255, 255, 255, 0.04);
-    --border-subtle: rgba(255, 255, 255, 0.07);
-    --border-glow: rgba(56, 189, 248, 0.4);
-    --cyan: #38bdf8;
-    --cyan-dim: #0ea5e9;
-    --cyan-glow: rgba(56, 189, 248, 0.20);
-    --cyan-deep-glow: rgba(56, 189, 248, 0.08);
-    --violet: #a78bfa;
-    --violet-dim: #8b5cf6;
-    --violet-glow: rgba(167, 139, 250, 0.20);
-    --emerald: #34d399;
-    --emerald-glow: rgba(52, 211, 153, 0.25);
-    --amber: #fbbf24;
-    --rose: #fb7185;
-    --text-white: #f0f4f8;
-    --text-secondary: #7c8da6;
-    --text-muted: #4a5568;
-    --gradient-hero: linear-gradient(135deg, #38bdf8 0%, #818cf8 40%, #a78bfa 70%, #c084fc 100%);
-    --gradient-btn: linear-gradient(135deg, #0ea5e9 0%, #6366f1 50%, #8b5cf6 100%);
-    --gradient-card: linear-gradient(160deg, rgba(56,189,248,0.06) 0%, rgba(139,92,246,0.04) 100%);
+    --bg-void: #f8fafc;
+    --bg-deep: #f1f5f9;
+    --bg-surface: #ffffff;
+    --bg-elevated: #ffffff;
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-card-hover: rgba(255, 255, 255, 1);
+    --border-dim: rgba(15, 23, 42, 0.05);
+    --border-subtle: rgba(15, 23, 42, 0.08);
+    --border-glow: rgba(14, 165, 233, 0.3);
+    --cyan: #00d1b2;
+    --cyan-dim: #00e6c3;
+    --cyan-glow: rgba(0, 209, 178, 0.15);
+    --cyan-deep-glow: rgba(0, 209, 178, 0.05);
+    --violet: #8b5cf6;
+    --violet-dim: #a78bfa;
+    --violet-glow: rgba(139, 92, 246, 0.15);
+    --emerald: #10b981;
+    --emerald-glow: rgba(16, 185, 129, 0.15);
+    --amber: #f59e0b;
+    --rose: #ef4444;
+    --text-white: #0f172a; /* Keeping variable name but changing color to dark for light theme */
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --gradient-hero: linear-gradient(135deg, #00d1b2 0%, #00b89c 100%);
+    --gradient-btn: linear-gradient(135deg, #00d1b2 0%, #00b89c 100%);
+    --gradient-card: linear-gradient(160deg, #ffffff 0%, #f8fafc 100%);
 }
 
 /* ── Global ── */
 html, body, [class*="css"] {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
     -webkit-font-smoothing: antialiased;
+    color: var(--text-white) !important;
 }
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(56, 189, 248, 0.2); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(56, 189, 248, 0.35); }
+::-webkit-scrollbar-thumb { background: rgba(15, 23, 42, 0.1); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(15, 23, 42, 0.2); }
 
 /* ── Main Background with Mesh ── */
 .stApp {
-    background:
-        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(56, 189, 248, 0.06) 0%, transparent 50%),
-        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
-        radial-gradient(ellipse 50% 50% at 50% 0%, rgba(56, 189, 248, 0.03) 0%, transparent 40%),
-        var(--bg-void) !important;
+    background: var(--bg-void) !important;
+    background-image: 
+        radial-gradient(ellipse 80% 50% at 20% 20%, rgba(14, 165, 233, 0.05) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%) !important;
     min-height: 100vh;
 }
 #MainMenu, footer, header { visibility: hidden; }
 
 /* ── Sidebar ── */
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-void) 100%) !important;
+    background: var(--bg-surface) !important;
     border-right: 1px solid var(--border-dim) !important;
-    backdrop-filter: blur(20px) !important;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.02) !important;
 }
 [data-testid="stSidebar"] * { color: var(--text-secondary); }
 [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {
     color: var(--text-white) !important;
     font-weight: 700 !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     text-transform: uppercase !important;
     letter-spacing: 0.12em !important;
-    opacity: 0.8;
 }
 
 /* ── Inputs ── */
@@ -105,67 +104,60 @@ html, body, [class*="css"] {
 .stTextArea > div > div > textarea,
 .stNumberInput > div > div > input,
 .stSelectbox > div > div {
-    background: rgba(255, 255, 255, 0.03) !important;
+    background: #ffffff !important;
     border: 1px solid var(--border-subtle) !important;
     border-radius: 12px !important;
     color: var(--text-white) !important;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    font-size: 14px !important;
+    transition: all 0.25s ease !important;
+    font-size: 15px !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02) !important;
 }
 .stTextInput > div > div > input:focus,
 .stTextArea > div > div > textarea:focus {
     border-color: var(--cyan) !important;
-    box-shadow: 0 0 0 3px var(--cyan-glow), 0 0 20px var(--cyan-deep-glow) !important;
-    background: rgba(56, 189, 248, 0.03) !important;
+    box-shadow: 0 0 0 3px var(--cyan-glow) !important;
 }
 .stTextInput label, .stTextArea label, .stNumberInput label,
 .stSelectbox label, .stFileUploader label {
     color: var(--text-muted) !important;
-    font-size: 11px !important;
+    font-size: 12px !important;
     font-weight: 600 !important;
     text-transform: uppercase !important;
-    letter-spacing: 0.1em !important;
+    letter-spacing: 0.05em !important;
 }
 
 /* ── Buttons ── */
 .stButton > button, .stFormSubmitButton > button {
     border-radius: 12px !important;
     font-weight: 600 !important;
-    font-size: 13px !important;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    font-size: 14px !important;
+    transition: all 0.2s ease !important;
     border: none !important;
     padding: 0.6rem 1.4rem !important;
-    letter-spacing: 0.02em !important;
-    position: relative !important;
-    overflow: hidden !important;
 }
 .stButton > button[kind="primary"], .stFormSubmitButton > button {
     background: var(--gradient-btn) !important;
-    background-size: 200% 200% !important;
     color: white !important;
-    box-shadow: 0 4px 15px rgba(14, 165, 233, 0.25), 0 0 30px rgba(99, 102, 241, 0.1) !important;
+    box-shadow: 0 4px 10px rgba(14, 165, 233, 0.2) !important;
 }
 .stButton > button[kind="primary"]:hover, .stFormSubmitButton > button:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 25px rgba(14, 165, 233, 0.35), 0 0 40px rgba(99, 102, 241, 0.15) !important;
-    background-position: right center !important;
-    filter: brightness(1.1) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 15px rgba(14, 165, 233, 0.3) !important;
 }
 .stButton > button[kind="secondary"] {
-    background: rgba(255, 255, 255, 0.04) !important;
+    background: #ffffff !important;
     color: var(--text-white) !important;
     border: 1px solid var(--border-subtle) !important;
-    backdrop-filter: blur(10px) !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
 }
 .stButton > button[kind="secondary"]:hover {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border-color: var(--cyan-glow) !important;
-    box-shadow: 0 0 15px var(--cyan-deep-glow) !important;
+    background: #f8fafc !important;
+    border-color: var(--border-dim) !important;
 }
 
 /* ── Tabs ── */
 .stTabs [data-baseweb="tab-list"] {
-    background: rgba(255, 255, 255, 0.02) !important;
+    background: rgba(15, 23, 42, 0.03) !important;
     border-radius: 14px !important;
     padding: 5px !important;
     gap: 4px !important;
@@ -174,32 +166,28 @@ html, body, [class*="css"] {
 .stTabs [data-baseweb="tab"] {
     border-radius: 11px !important;
     font-weight: 600 !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
     color: var(--text-muted) !important;
     padding: 10px 24px !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 .stTabs [aria-selected="true"] {
-    background: var(--gradient-btn) !important;
-    color: white !important;
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2) !important;
+    background: #ffffff !important;
+    color: var(--text-white) !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
+    border: 1px solid var(--border-dim) !important;
 }
 
 /* ── Chat Messages ── */
 [data-testid="stChatMessage"] {
-    background: var(--gradient-card) !important;
+    background: var(--bg-surface) !important;
     border: 1px solid var(--border-subtle) !important;
     border-radius: 18px !important;
     margin-bottom: 14px !important;
     padding: 18px !important;
-    backdrop-filter: blur(12px) !important;
-    transition: border-color 0.3s ease !important;
-}
-[data-testid="stChatMessage"]:hover {
-    border-color: rgba(56, 189, 248, 0.15) !important;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
 }
 [data-testid="stChatMessage"] .stMarkdown p {
-    font-size: 14px !important;
+    font-size: 15px !important;
     line-height: 1.75 !important;
     color: var(--text-white) !important;
 }
@@ -209,11 +197,11 @@ html, body, [class*="css"] {
     background: var(--bg-surface) !important;
     border: 1px solid var(--border-subtle) !important;
     border-radius: 16px !important;
-    transition: border-color 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
 }
 [data-testid="stChatInput"] > div:focus-within {
     border-color: var(--cyan) !important;
-    box-shadow: 0 0 20px var(--cyan-deep-glow) !important;
+    box-shadow: 0 0 0 3px var(--cyan-glow) !important;
 }
 [data-testid="stChatInput"] textarea {
     color: var(--text-white) !important;
@@ -225,12 +213,11 @@ html, body, [class*="css"] {
 
 /* ── Form ── */
 [data-testid="stForm"] {
-    background: linear-gradient(160deg, rgba(56,189,248,0.03) 0%, rgba(139,92,246,0.02) 100%) !important;
+    background: var(--bg-surface) !important;
     border: 1px solid var(--border-subtle) !important;
     border-radius: 20px !important;
     padding: 2.5rem !important;
-    backdrop-filter: blur(16px) !important;
-    box-shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.05) !important;
 }
 
 /* ═══ Custom Components ═══ */
@@ -241,38 +228,24 @@ html, body, [class*="css"] {
     padding: 2.5rem 0 1.5rem 0;
     position: relative;
 }
-.ai-header::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(56,189,248,0.08) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-}
 .ai-header h1 {
     font-size: 2.8rem;
     font-weight: 900;
     margin: 0;
     letter-spacing: -0.04em;
-    position: relative; z-index: 1;
+    color: var(--text-white);
 }
 .ai-header h1 .gradient-text {
     background: var(--gradient-hero);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    background-size: 300% 300%;
-    animation: gradientShift 4s ease infinite;
 }
 .ai-header .subtitle {
     color: var(--text-secondary);
     font-size: 0.9rem;
     margin-top: 10px;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    position: relative; z-index: 1;
+    font-weight: 500;
 }
 
 /* Agent Badge */
@@ -280,81 +253,61 @@ html, body, [class*="css"] {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(56, 189, 248, 0.08);
+    background: rgba(14, 165, 233, 0.1);
     color: var(--cyan);
     padding: 4px 12px;
     border-radius: 8px;
     font-size: 10px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
-    border: 1px solid rgba(56, 189, 248, 0.15);
-    transition: all 0.3s ease;
-}
-.agent-badge:hover {
-    background: rgba(56, 189, 248, 0.15);
-    border-color: rgba(56, 189, 248, 0.3);
-    box-shadow: 0 0 12px var(--cyan-deep-glow);
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(14, 165, 233, 0.2);
 }
 .agent-badge-violet {
-    background: rgba(167, 139, 250, 0.08);
+    background: rgba(139, 92, 246, 0.1);
     color: var(--violet);
-    border-color: rgba(167, 139, 250, 0.15);
+    border-color: rgba(139, 92, 246, 0.2);
 }
 .agent-badge-emerald {
-    background: rgba(52, 211, 153, 0.08);
+    background: rgba(16, 185, 129, 0.1);
     color: var(--emerald);
-    border-color: rgba(52, 211, 153, 0.15);
+    border-color: rgba(16, 185, 129, 0.2);
 }
 .agent-badge-amber {
-    background: rgba(251, 191, 36, 0.08);
+    background: rgba(245, 158, 11, 0.1);
     color: var(--amber);
-    border-color: rgba(251, 191, 36, 0.15);
+    border-color: rgba(245, 158, 11, 0.2);
 }
 
 /* Status Indicators */
 .status-dot {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     display: inline-block;
-    margin-right: 6px;
-    animation: statusPulse 2s ease-in-out infinite;
+    margin-right: 8px;
 }
 .status-online { background: var(--emerald); box-shadow: 0 0 8px var(--emerald-glow); }
-.status-processing { background: var(--amber); box-shadow: 0 0 8px rgba(251,191,36,0.3); }
+.status-processing { background: var(--amber); }
 
 /* Metric Cards (Welcome Screen) */
 .metric-card {
-    background: var(--gradient-card);
+    background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
-    border-radius: 18px;
+    border-radius: 16px;
     padding: 24px;
     text-align: center;
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    cursor: default;
-}
-.metric-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--gradient-hero);
-    opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
 }
 .metric-card:hover {
-    border-color: rgba(56, 189, 248, 0.2);
     transform: translateY(-4px);
-    box-shadow: 0 16px 40px -12px rgba(56, 189, 248, 0.12);
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08);
+    border-color: rgba(14, 165, 233, 0.3);
 }
-.metric-card:hover::before { opacity: 1; }
 .metric-card .metric-icon {
     font-size: 2rem;
     margin-bottom: 14px;
-    filter: drop-shadow(0 0 12px var(--cyan-glow));
 }
 .metric-card .metric-title {
     font-size: 14px;
@@ -370,65 +323,47 @@ html, body, [class*="css"] {
 
 /* Profile Card */
 .profile-card {
-    background: var(--gradient-card);
+    background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: 20px;
     padding: 28px;
     position: relative;
-    overflow: hidden;
-    backdrop-filter: blur(12px);
-}
-.profile-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--gradient-hero);
+    box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
 }
 
 /* Appointment Card */
 .appt-card {
-    background: var(--gradient-card);
+    background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
-    border-left: 3px solid var(--cyan);
-    border-radius: 14px;
+    border-left: 4px solid var(--cyan);
+    border-radius: 12px;
     padding: 16px;
-    margin-bottom: 10px;
-    transition: all 0.25s ease;
-}
-.appt-card:hover {
-    border-left-color: var(--violet);
-    transform: translateX(4px);
-    box-shadow: 0 4px 20px rgba(56, 189, 248, 0.06);
+    margin-bottom: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02);
 }
 
 /* Doctor Card */
 .doc-card {
-    background: rgba(255,255,255,0.02);
-    border: 1px solid var(--border-dim);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
     border-radius: 12px;
     padding: 14px;
-    margin-bottom: 8px;
-    transition: all 0.25s ease;
-}
-.doc-card:hover {
-    background: rgba(56, 189, 248, 0.04);
-    border-color: rgba(56, 189, 248, 0.15);
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 
 /* System Info Bar */
 .system-info {
-    background: linear-gradient(135deg, rgba(56,189,248,0.06) 0%, rgba(139,92,246,0.04) 100%);
-    border: 1px solid rgba(56, 189, 248, 0.12);
-    border-radius: 14px;
-    padding: 14px 20px;
+    background: #ffffff;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 12px 16px;
     font-size: 12px;
     color: var(--text-secondary);
     display: flex;
-    gap: 12px;
     align-items: center;
     margin-bottom: 20px;
-    backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
 }
 
 /* Pipeline Visualization */
@@ -436,45 +371,70 @@ html, body, [class*="css"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0;
-    margin: 20px 0 10px 0;
+    gap: 8px;
+    margin: 5px 0 5px 0;
     flex-wrap: wrap;
 }
 .pipeline-node {
-    background: rgba(255,255,255,0.03);
-    border: 1px solid var(--border-subtle);
-    border-radius: 10px;
-    padding: 8px 16px;
+    background: #f1f5f9;
+    border: 1px solid var(--border-dim);
+    border-radius: 8px;
+    padding: 6px 12px;
     font-size: 11px;
     font-weight: 600;
     color: var(--text-secondary);
-    transition: all 0.3s ease;
-}
-.pipeline-node:hover {
-    border-color: var(--cyan);
-    color: var(--cyan);
-    box-shadow: 0 0 15px var(--cyan-deep-glow);
 }
 .pipeline-node.active {
+    background: rgba(14, 165, 233, 0.1);
     border-color: var(--cyan);
     color: var(--cyan);
-    background: rgba(56, 189, 248, 0.08);
 }
 .pipeline-arrow {
-    color: var(--text-muted);
-    font-size: 14px;
-    padding: 0 6px;
-    opacity: 0.5;
+    color: var(--border-subtle);
+    font-size: 12px;
+}
+hr { border-color: var(--border-dim) !important; }
+.fade-in { animation: fadeIn 0.4s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── Force Light Mode on Streamlit Defaults ── */
+[data-testid="stFileUploader"] {
+    background-color: #ffffff !important;
+    border: 1px dashed var(--cyan) !important;
+    border-radius: 12px !important;
+    color: var(--text-white) !important;
+}
+[data-testid="stFileUploader"] * {
+    color: var(--text-white) !important;
 }
 
-hr { border-color: var(--border-dim) !important; }
+[data-testid="stChatInput"] {
+    background-color: #ffffff !important;
+}
+[data-testid="stChatInput"] textarea {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+[data-testid="stChatInput"] svg {
+    color: #ffffff !important;
+}
 
-/* ── Animations ── */
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes gradientShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-@keyframes statusPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.6; transform: scale(0.85); } }
-@keyframes glowPulse { 0%, 100% { box-shadow: 0 0 5px var(--cyan-deep-glow); } 50% { box-shadow: 0 0 20px var(--cyan-glow); } }
-.fade-in { animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+.ai-header h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin: 0;
+    letter-spacing: -0.05em;
+    color: #0f172a;
+}
+
+
+/* ── Reduce Streamlit Default Padding ── */
+.block-container {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+    max-width: 95% !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -489,9 +449,9 @@ def auth_screen():
         st.markdown("""
         <div class="ai-header fade-in">
             <div style="margin-bottom:20px;">
-                <span style="font-size:3.5rem; filter: drop-shadow(0 0 20px rgba(56,189,248,0.35));">🧠</span>
+                <span style="font-size:3.5rem; filter: drop-shadow(0 4px 10px rgba(14,165,233,0.15));">🧠</span>
             </div>
-            <h1>Medi<span class="gradient-text">Assist AI</span></h1>
+            <h1 style="font-weight: 900; font-size: 4rem;">Medi<span class="gradient-text" style="font-weight: 900;">Assist AI</span></h1>
             <p class="subtitle">Multi-Agent Healthcare Intelligence Platform</p>
             <div class="pipeline-flow" style="margin-top:20px;">
                 <span class="pipeline-node active">🧠 Supervisor</span>
@@ -687,7 +647,7 @@ def doctor_dashboard():
                 <div style="flex-grow:1;">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div>
-                            <h2 style="margin:0 0 6px 0; color:var(--text-primary); font-size:1.5rem; font-weight:800; letter-spacing:-0.02em;">
+                            <h2 style="margin:0 0 6px 0; color:var(--text-white); font-size:1.5rem; font-weight:800; letter-spacing:-0.02em;">
                                 Dr. {profile.get('name', st.session_state.user_name)}
                             </h2>
                             <span class="agent-badge" style="background:rgba(16,185,129,0.1); color:#10b981; border-color:rgba(16,185,129,0.2);">
@@ -695,12 +655,12 @@ def doctor_dashboard():
                             </span>
                         </div>
                         <div style="text-align:right;">
-                            <div style="color:var(--text-primary); font-weight:600; font-size:14px;">{profile.get('medical_name') or 'Clinic Not Set'}</div>
+                            <div style="color:var(--text-white); font-weight:600; font-size:14px;">{profile.get('medical_name') or 'Clinic Not Set'}</div>
                             <div style="color:var(--text-secondary); font-size:12px; margin-top:3px;">📍 {profile.get('clinic_address') or 'N/A'}</div>
                             <div style="color:var(--text-secondary); font-size:12px; margin-top:2px;">📞 {profile.get('contact_number') or 'N/A'}</div>
                         </div>
                     </div>
-                    <div style="margin-top:16px; color:var(--text-secondary); font-size:13px; line-height:1.6; background:rgba(255,255,255,0.03); padding:12px 16px; border-radius:10px; border:1px solid var(--border-subtle);">
+                    <div style="margin-top:16px; color:var(--text-secondary); font-size:13px; line-height:1.6; background:#f8fafc; padding:12px 16px; border-radius:10px; border:1px solid var(--border-subtle);">
                         {profile.get('bio') or '<em>No bio provided. Update your profile below.</em>'}
                     </div>
                 </div>
@@ -714,7 +674,7 @@ def doctor_dashboard():
             st.session_state.messages = []
             st.rerun()
 
-    st.divider()
+
     tab1, tab2 = st.tabs(["📋 Dashboard", "⚙️ My Profile"])
 
     with tab1:
@@ -729,8 +689,8 @@ def doctor_dashboard():
                 if accepted:
                     for appt in accepted:
                         st.markdown(f"""
-                        <div class="appt-card" style="border-left-color: var(--accent-emerald);">
-                            <div style="color:var(--text-primary); font-weight:600; font-size:13px; margin-bottom:4px;">{appt['patient_name']}</div>
+                        <div class="appt-card" style="border-left-color: var(--emerald);">
+                            <div style="color:var(--text-white); font-weight:600; font-size:13px; margin-bottom:4px;">{appt['patient_name']}</div>
                             <div style="color:var(--text-secondary); font-size:12px;">📅 {appt['date']} · ⏰ {appt['time']}</div>
                         </div>
                         """, unsafe_allow_html=True)
@@ -765,7 +725,7 @@ def doctor_dashboard():
                         <div style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px;">
                             <div>
                                 <div style="color:var(--text-muted); font-size:10px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:3px;">Patient</div>
-                                <div style="color:var(--text-primary); font-weight:600; font-size:13px;">{appt['patient_name']}</div>
+                                <div style="color:var(--text-white); font-weight:600; font-size:13px;">{appt['patient_name']}</div>
                             </div>
                             <div>
                                 <div style="color:var(--text-muted); font-size:10px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:3px;">Email</div>
@@ -773,11 +733,11 @@ def doctor_dashboard():
                             </div>
                             <div>
                                 <div style="color:var(--text-muted); font-size:10px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:3px;">Date</div>
-                                <div style="color:var(--accent-light); font-weight:600; font-size:13px;">{appt['date']}</div>
+                                <div style="color:var(--cyan); font-weight:600; font-size:13px;">{appt['date']}</div>
                             </div>
                             <div>
                                 <div style="color:var(--text-muted); font-size:10px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:3px;">Time</div>
-                                <div style="color:var(--accent-light); font-weight:600; font-size:13px;">{appt['time']}</div>
+                                <div style="color:var(--cyan); font-weight:600; font-size:13px;">{appt['time']}</div>
                             </div>
                         </div>
                     </div>
@@ -834,33 +794,134 @@ def doctor_dashboard():
 
 
 # ════════════════════════════════════════════════════════════════
-# PATIENT DASHBOARD (Main App)
+
 # ════════════════════════════════════════════════════════════════
+# PATIENT PROFILE
+# ════════════════════════════════════════════════════════════════
+def render_patient_profile(profile):
+    st.markdown("### ⚙️ My Profile")
+    st.markdown("<div style='color:var(--text-secondary); font-size:13px; margin-bottom:16px;'>Complete your medical profile for better AI assistance.</div>", unsafe_allow_html=True)
+    
+    with st.form("patient_profile_form"):
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            age = st.text_input("Age", value=profile.get("age") or "")
+            blood = st.selectbox("Blood Group", ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Unknown"], index=0 if not profile.get("blood_group") else ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Unknown"].index(profile.get("blood_group", "Unknown")))
+        with c2:
+            gender = st.selectbox("Gender", ["Male", "Female", "Other"], index=0 if not profile.get("gender") else ["Male", "Female", "Other"].index(profile.get("gender", "Male")))
+            height = st.text_input("Height (cm)", value=profile.get("height") or "")
+        with c3:
+            weight = st.text_input("Weight (kg)", value=profile.get("weight") or "")
+            phone = st.text_input("Phone Number", value=profile.get("phone_number") or "")
+            
+        c4, c5 = st.columns(2)
+        with c4:
+            address = st.text_area("Address", value=profile.get("address") or "", height=80)
+            allergies = st.text_area("Allergies (if any)", value=profile.get("allergies") or "", height=80)
+        with c5:
+            emergency = st.text_area("Emergency Contact", value=profile.get("emergency_contact") or "", height=80)
+            diseases = st.text_area("Existing Diseases", value=profile.get("existing_diseases") or "", height=80)
+            
+        history = st.text_area("Medical History (Operations, major illnesses)", value=profile.get("medical_history") or "", height=100)
+        
+        if st.form_submit_button("Save Profile", type="primary"):
+            payload = {
+                "age": age, "gender": gender, "height": height, "weight": weight,
+                "blood_group": blood, "phone_number": phone, "address": address,
+                "emergency_contact": emergency, "allergies": allergies,
+                "existing_diseases": diseases, "medical_history": history
+            }
+            r = requests.post(f"{BASE_URL}/patients/profile", params={"patient_email": st.session_state.user_email}, json=payload)
+            if r.status_code == 200:
+                st.success("Profile saved successfully!")
+                st.rerun()
+            else:
+                st.error("Failed to save profile.")
+
+# ════════════════════════════════════════════════════════════════
+# PATIENT DASHBOARD (Main App)
+
+
+# ════════════════════════════════════════════════════════════════
+# PATIENT PROFILE
+# ════════════════════════════════════════════════════════════════
+def render_patient_profile(profile):
+    st.markdown("### ⚙️ My Profile")
+    st.markdown("<div style='color:var(--text-secondary); font-size:13px; margin-bottom:16px;'>Complete your medical profile for better AI assistance.</div>", unsafe_allow_html=True)
+    
+    with st.form("patient_profile_form"):
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            age = st.text_input("Age", value=profile.get("age") or "")
+            blood = st.selectbox("Blood Group", ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Unknown"], index=0 if not profile.get("blood_group") else ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "Unknown"].index(profile.get("blood_group", "Unknown")))
+        with c2:
+            gender = st.selectbox("Gender", ["Male", "Female", "Other"], index=0 if not profile.get("gender") else ["Male", "Female", "Other"].index(profile.get("gender", "Male")))
+            height = st.text_input("Height (cm)", value=profile.get("height") or "")
+        with c3:
+            weight = st.text_input("Weight (kg)", value=profile.get("weight") or "")
+            phone = st.text_input("Phone Number", value=profile.get("phone_number") or "")
+            
+        c4, c5 = st.columns(2)
+        with c4:
+            address = st.text_area("Address", value=profile.get("address") or "", height=80)
+            allergies = st.text_area("Allergies (if any)", value=profile.get("allergies") or "", height=80)
+        with c5:
+            emergency = st.text_area("Emergency Contact", value=profile.get("emergency_contact") or "", height=80)
+            diseases = st.text_area("Existing Diseases", value=profile.get("existing_diseases") or "", height=80)
+            
+        history = st.text_area("Medical History (Operations, major illnesses)", value=profile.get("medical_history") or "", height=100)
+        
+        if st.form_submit_button("Save Profile", type="primary"):
+            payload = {
+                "age": age, "gender": gender, "height": height, "weight": weight,
+                "blood_group": blood, "phone_number": phone, "address": address,
+                "emergency_contact": emergency, "allergies": allergies,
+                "existing_diseases": diseases, "medical_history": history
+            }
+            r = requests.post(f"{BASE_URL}/patients/profile", params={"patient_email": st.session_state.user_email}, json=payload)
+            if r.status_code == 200:
+                st.toast("Profile saved successfully!")
+                st.rerun()
+            else:
+                st.error("Failed to save profile.")
+
 def main_app():
-    # System status bar
-    st.markdown("""
-    <div class="system-info fade-in">
-        <span class="status-dot status-online"></span>
-        <span><strong>MediAssist AI</strong> — Multi-Agent System Active</span>
-        <span style="margin-left:auto; font-size:11px; color:var(--text-muted);">LangGraph Supervisor • GPT-3.5 Turbo</span>
+    res = requests.get(f"{BASE_URL}/patients/profile", params={"patient_email": st.session_state.user_email})
+    profile = res.json() if res.status_code == 200 else {}
+    profile_completed = profile.get("profile_completed", False)
+
+    # System status bar with Agent Headers
+    st.markdown('''
+    <div class="system-info fade-in" style="display:flex; justify-content:space-between; align-items:center; padding: 18px 24px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <span class="status-dot status-online" style="width:10px; height:10px;"></span>
+            <span style="font-size:24px; font-weight:900; color:var(--text-white); letter-spacing:-0.03em;">MediAssist AI</span>
+        </div>
+        <div style="display:flex; gap:35px; font-size:14px; font-weight:800; color:var(--text-white);">
+            <span style="display:flex; align-items:center; gap:6px;">🔬 Symptom Check</span>
+            <span style="display:flex; align-items:center; gap:6px;">💊 Medicine Info</span>
+            <span style="display:flex; align-items:center; gap:6px;">📅 Appointments</span>
+            <span style="display:flex; align-items:center; gap:6px;">📚 Medical Q&A</span>
+        </div>
+        <span style="font-size:13px; color:var(--text-muted); font-weight:600;">Multi-Agent System Active</span>
     </div>
-    """, unsafe_allow_html=True)
+    ''', unsafe_allow_html=True)
 
     # Top bar
     col1, col2 = st.columns([8, 1])
     with col1:
         avatar_url = f"https://ui-avatars.com/api/?name={st.session_state.user_name.replace(' ', '+')}&background=6366f1&color=fff&size=128&bold=true&format=svg"
-        st.markdown(f"""
-        <div style="display:flex; align-items:center; gap:14px; padding:8px 0 20px 0; animation: fadeIn 0.4s ease-out;">
+        st.markdown(f'''
+        <div style="display:flex; align-items:center; gap:14px; padding:0px 0 10px 0; animation: fadeIn 0.4s ease-out;">
             <img src="{avatar_url}" style="border-radius:12px; width:48px; height:48px; border:2px solid var(--accent); box-shadow: 0 0 12px var(--accent-glow);">
             <div>
-                <h2 style="margin:0; color:var(--text-primary); font-size:1.3rem; font-weight:800; letter-spacing:-0.02em;">
+                <h2 style="margin:0; color:var(--text-white); font-size:1.3rem; font-weight:800; letter-spacing:-0.02em;">
                     {st.session_state.user_name}
                 </h2>
                 <p style="margin:0; color:var(--text-secondary); font-size:12px;">Patient Dashboard</p>
             </div>
         </div>
-        """, unsafe_allow_html=True)
+        ''', unsafe_allow_html=True)
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("Logout", type="secondary"):
@@ -869,173 +930,197 @@ def main_app():
             st.session_state.current_session_id = None
             st.rerun()
 
-    st.divider()
 
-    # ── Sidebar ──
-    with st.sidebar:
-        st.markdown("### 💬 Sessions")
-        if st.button("＋ New Chat", type="primary"):
-            st.session_state.current_session_id = None
-            st.session_state.messages = []
-            st.rerun()
+    if not profile_completed:
+        st.info("👋 Welcome! Please complete your Patient Profile to continue.")
+        render_patient_profile(profile)
+        return
 
-        try:
-            sessions_res = requests.get(f"{BASE_URL}/chat/sessions", params={"patient_email": st.session_state.user_email})
-            chat_sessions = sessions_res.json() if sessions_res.status_code == 200 else []
-        except:
-            chat_sessions = []
+    tab1, tab2 = st.tabs(["🏥 Dashboard", "⚙️ My Profile"])
 
-        if chat_sessions:
-            for s in chat_sessions:
-                col_btn, col_del = st.columns([8, 2])
-                with col_btn:
-                    btn_style = "primary" if st.session_state.current_session_id == s["id"] else "secondary"
-                    if st.button(f"💬 {s['session_name']}", key=f"session_{s['id']}", type=btn_style):
-                        st.session_state.current_session_id = s["id"]
-                        try:
-                            msgs_res = requests.get(f"{BASE_URL}/chat/sessions/{s['id']}/messages")
-                            if msgs_res.status_code == 200:
-                                st.session_state.messages = msgs_res.json()
-                        except:
-                            st.session_state.messages = []
-                        st.rerun()
-                with col_del:
-                    if st.button("🗑", key=f"del_{s['id']}", type="secondary"):
-                        requests.delete(f"{BASE_URL}/chat/sessions/{s['id']}")
-                        if st.session_state.current_session_id == s["id"]:
-                            st.session_state.current_session_id = None
-                            st.session_state.messages = []
-                        st.rerun()
-        else:
-            st.caption("No past sessions.")
-
-        st.divider()
-        st.markdown("### 🏥 Doctors")
-        show_docs = st.toggle("Show Directory")
-        if show_docs:
-            try:
-                res = requests.get(f"{BASE_URL}/doctors")
-                if res.status_code == 200:
-                    docs = res.json()
-                    if docs:
-                        all_specs = sorted(list(set(d['specialization'] for d in docs)))
-                        selected_spec = st.selectbox("Filter", ["All"] + all_specs)
-
-                        for d in docs:
-                            if selected_spec != "All" and d['specialization'] != selected_spec:
-                                continue
-                            doc_avatar = f"https://ui-avatars.com/api/?name={d['name'].replace(' ', '+')}&background=6366f1&color=fff&size=64&bold=true&format=svg"
-                            exp_text = f"{d.get('experience')} yrs" if d.get('experience') else "N/A"
-                            st.markdown(f"""
-                            <div class="doc-card">
-                                <div style="display:flex; gap:10px; align-items:center;">
-                                    <img src="{doc_avatar}" style="border-radius:8px; width:36px; height:36px;">
-                                    <div>
-                                        <div style="color:var(--text-primary); font-weight:600; font-size:13px;">Dr. {d['name']}</div>
-                                        <div style="color:var(--accent-light); font-size:11px; font-weight:600;">{d['specialization']}</div>
-                                        <div style="color:var(--text-muted); font-size:11px;">{exp_text} · {d.get('medical_name') or 'Independent'}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            """, unsafe_allow_html=True)
-                    else:
-                        st.caption("No doctors available.")
+    with tab1:
+        # Action Header for Dashboard
+        h_col1, h_col2, h_col3 = st.columns(3)
+        
+        with h_col1:
+            with st.popover("💬 Previous Sessions", use_container_width=True):
+                if st.button("＋ New Chat", type="primary", use_container_width=True):
+                    st.session_state.current_session_id = None
+                    st.session_state.messages = []
+                    st.rerun()
+        
+                try:
+                    sessions_res = requests.get(f"{BASE_URL}/chat/sessions", params={"patient_email": st.session_state.user_email})
+                    chat_sessions = sessions_res.json() if sessions_res.status_code == 200 else []
+                except:
+                    chat_sessions = []
+        
+                if chat_sessions:
+                    for s in chat_sessions:
+                        col_btn, col_del = st.columns([8, 2])
+                        with col_btn:
+                            btn_style = "primary" if st.session_state.current_session_id == s["id"] else "secondary"
+                            if st.button(f"💬 {s['session_name'][:15]}...", key=f"session_{s['id']}", type=btn_style, use_container_width=True):
+                                st.session_state.current_session_id = s["id"]
+                                try:
+                                    msgs_res = requests.get(f"{BASE_URL}/chat/sessions/{s['id']}/messages")
+                                    if msgs_res.status_code == 200:
+                                        st.session_state.messages = msgs_res.json()
+                                except:
+                                    st.session_state.messages = []
+                                st.rerun()
+                        with col_del:
+                            if st.button("🗑", key=f"del_{s['id']}", type="secondary", use_container_width=True):
+                                requests.delete(f"{BASE_URL}/chat/sessions/{s['id']}")
+                                if st.session_state.current_session_id == s["id"]:
+                                    st.session_state.current_session_id = None
+                                    st.session_state.messages = []
+                                st.rerun()
                 else:
-                    st.error("Failed to fetch.")
-            except:
-                st.error("Connection error.")
+                    st.caption("No past sessions.")
 
-        st.divider()
-        st.markdown("### 📄 Report Analysis")
-        report_file = st.file_uploader("Upload PDF or Image", type=["pdf", "jpg", "jpeg", "png"],
-                                       label_visibility="collapsed")
-        if st.button("Analyze Report") and report_file:
-            with st.spinner("🔬 OCR Agent processing..."):
-                files = {"file": (report_file.name, report_file, report_file.type)}
-                res = requests.post(f"{BASE_URL}/reports/upload", files=files)
-            if res.status_code == 200:
-                summary = res.json()["summary"]
-                st.session_state.messages.append({
-                    "role": "assistant",
-                    "content": f"*🔬 Processed by: OCR AGENT*\n\n**Report Summary:**\n{summary}"
-                })
-                st.rerun()
-            else:
-                st.error("Error analyzing report.")
+        with h_col2:
+            with st.popover("📅 My Appointments", use_container_width=True):
+                try:
+                    appt_res = requests.get(f"{BASE_URL}/appointments/patient", params={"patient_email": st.session_state.user_email})
+                    if appt_res.status_code == 200:
+                        my_appts = appt_res.json()
+                        if my_appts:
+                            for a in my_appts:
+                                status_color = "var(--amber)" if a['status'] == 'pending' else ("var(--emerald)" if a['status'] == 'accepted' else "var(--rose)")
+                                st.markdown(f'''
+                                <div style="background:var(--bg-elevated); padding:10px; border-radius:8px; border-left:4px solid {status_color}; margin-bottom:8px; font-size:12px;">
+                                    <div style="font-weight:bold; color:var(--text-white);">Dr. {a['doctor_name']}</div>
+                                    <div style="color:var(--text-secondary);">{a['date']} | {a['time']}</div>
+                                    <div style="color:{status_color}; font-weight:600; margin-top:4px;">{a['status'].upper()}</div>
+                                </div>
+                                ''', unsafe_allow_html=True)
+                        else:
+                            st.caption("No appointments booked yet.")
+                except:
+                    st.caption("Failed to load appointments.")
+    
+        with h_col3:
+            with st.popover("🏥 Available Doctors", use_container_width=True):
+                try:
+                    res = requests.get(f"{BASE_URL}/doctors")
+                    if res.status_code == 200:
+                        docs = res.json()
+                        if docs:
+                            all_specs = sorted(list(set(d['specialization'] for d in docs)))
+                            selected_spec = st.selectbox("Filter Specialty", ["All"] + all_specs, label_visibility="collapsed")
+                            for i, d in enumerate(docs):
+                                if selected_spec != "All" and d['specialization'] != selected_spec:
+                                    continue
+                                doc_avatar = f"https://ui-avatars.com/api/?name={d['name'].replace(' ', '+')}&background=6366f1&color=fff&size=64&bold=true&format=svg"
+                                exp_text = f"{d.get('experience')} yrs" if d.get('experience') else "N/A"
+                                
+                                # Clean card styling
+                                with st.container(border=True):
+                                    st.markdown(f'''
+                                    <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                                        <img src="{doc_avatar}" style="border-radius:8px; width:48px; height:48px;">
+                                        <div>
+                                            <div style="color:var(--text-white); font-weight:700; font-size:14px;">Dr. {d['name']}</div>
+                                            <div style="color:var(--cyan); font-size:12px; font-weight:600;">{d['specialization']}</div>
+                                            <div style="color:var(--text-muted); font-size:11px;">{exp_text} exp | {d.get('medical_name') or 'Independent'}</div>
+                                        </div>
+                                    </div>
+                                    ''', unsafe_allow_html=True)
+                                    
+                                    # Book Appointment logic
+                                    with st.expander("📅 Book"):
+                                        st.markdown(f"**Book with Dr. {d['name']}**")
+                                        b_date = st.date_input("Date", key=f"date_{i}")
+                                        b_time = st.time_input("Time", key=f"time_{i}")
+                                        b_reason = st.text_input("Reason", placeholder="Brief symptom/reason", key=f"reason_{i}")
+                                        if st.button("Confirm Booking", key=f"book_{i}", type="primary", use_container_width=True):
+                                            payload = {
+                                                "patient_name": st.session_state.user_name,
+                                                "patient_email": st.session_state.user_email,
+                                                "doctor_name": d['name'],
+                                                "doctor_email": d['email'],
+                                                "date": b_date.strftime("%Y-%m-%d"),
+                                                "time": b_time.strftime("%H:%M")
+                                            }
+                                            breq = requests.post(f"{BASE_URL}/appointments/create", json=payload)
+                                            if breq.status_code == 200:
+                                                st.toast("Requested successfully!")
+                                                st.rerun()
+                                            else:
+                                                st.error("Booking failed.")
+                        else:
+                            st.caption("No doctors available.")
+                    else:
+                        st.error("Failed to fetch.")
+                except Exception as e:
+                    st.error("Connection error.")
 
-    # ── Welcome Cards (when no messages) ──
-    if not st.session_state.messages:
-        st.markdown("""
-        <div style="text-align:center; padding:2rem 0 0.5rem 0;" class="fade-in">
-            <span style="font-size:2.8rem; filter: drop-shadow(0 0 16px rgba(56,189,248,0.3));">🧠</span>
-            <h2 style="color:var(--text-white); font-weight:800; font-size:1.6rem; margin:14px 0 6px 0; letter-spacing:-0.03em;">What can I help you with?</h2>
-            <p style="color:var(--text-secondary); font-size:12px; margin:0;">Powered by LangGraph Multi-Agent Supervisor Architecture</p>
-            <div class="pipeline-flow">
-                <span class="pipeline-node active">User Query</span>
-                <span class="pipeline-arrow">→</span>
-                <span class="pipeline-node active">🧠 Supervisor</span>
-                <span class="pipeline-arrow">→</span>
-                <span class="pipeline-node">Agent Execution</span>
-                <span class="pipeline-arrow">→</span>
-                <span class="pipeline-node">Response</span>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+        col_chat, col_right = st.columns([7, 3], gap="medium")
+    
+        with col_chat:
+            # ── Chat Messages ──
+            chat_container = st.container(height=500)
+            with chat_container:
+                if not st.session_state.messages:
+                    st.chat_message("assistant").markdown(f"Hello **{st.session_state.user_name}** 👋\n\nI'm your AI health assistant powered by a **multi-agent system**. The Supervisor will automatically route your query to the right specialist agent.\n\nHow can I help you today?")
+                
+                for message in st.session_state.messages:
+                    with st.chat_message(message["role"]):
+                        if "content" in message:
+                            st.markdown(message["content"])
+                        if "image" in message:
+                            try: st.image(message["image"])
+                            except: pass
 
-        cols = st.columns(4)
-        cards = [
-            ("🔬", "Symptom Check", "Describe symptoms for AI diagnosis", "Symptom Agent"),
-            ("💊", "Medicine Info", "Drug interactions & suggestions", "Medicine Agent"),
-            ("📅", "Appointments", "Book a doctor visit", "Appointment Agent"),
-            ("📚", "Medical Q&A", "Ask from medical knowledge base", "RAG Agent"),
-        ]
-        for col, (icon, title, desc, agent) in zip(cols, cards):
-            col.markdown(f"""
-            <div class="metric-card fade-in">
-                <div class="metric-icon">{icon}</div>
-                <div class="metric-title">{title}</div>
-                <div class="metric-desc">{desc}</div>
-                <div style="margin-top:8px;"><span class="agent-badge" style="font-size:9px; padding:2px 8px;">{agent}</span></div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        st.session_state.messages.append({
-            "role": "assistant",
-            "content": f"Hello **{st.session_state.user_name}** 👋\n\nI'm your AI health assistant powered by a **multi-agent system**. The Supervisor will automatically route your query to the right specialist agent:\n\n- 🔬 **Symptom Agent** — Describe symptoms for AI-powered diagnosis\n- 💊 **Medicine Agent** — Drug information & OTC suggestions\n- 📅 **Appointment Agent** — Book a doctor appointment\n- 📚 **RAG Agent** — Medical knowledge from curated sources\n\nHow can I help you today?"
-        })
-
-    # ── Chat Messages ──
-    for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            if "content" in message:
-                st.markdown(message["content"])
-            if "image" in message:
-                try: st.image(message["image"])
-                except: pass
+        with col_right:
+            st.markdown("### 📄 Report Analysis")
+            report_file = st.file_uploader("Upload PDF or Image", type=["pdf", "jpg", "jpeg", "png"], label_visibility="collapsed")
+            if st.button("Analyze Report", type="primary", use_container_width=True) and report_file:
+                with st.spinner("🔬 OCR Agent processing..."):
+                    files = {"file": (report_file.name, report_file, report_file.type)}
+                    res = requests.post(f"{BASE_URL}/reports/upload", files=files)
+                if res.status_code == 200:
+                    summary = res.json()["summary"]
+                    st.session_state.messages.append({
+                        "role": "assistant",
+                        "content": f"*🔬 Processed by: OCR AGENT*\n\n**Report Summary:**\n{summary}"
+                    })
+                    st.rerun()
+                else:
+                    st.error("Error analyzing report.")
 
     # ── Chat Input ──
     if user_input := st.chat_input("Describe your symptoms, ask about medicines, or book an appointment..."):
-        st.chat_message("user").markdown(user_input)
         st.session_state.messages.append({"role": "user", "content": user_input})
-        with st.spinner("🧠 Supervisor routing to agent..."):
-            try:
-                res = requests.post(f"{BASE_URL}/chat", json={
-                    "message": user_input,
-                    "user_name": st.session_state.user_name,
-                    "user_email": st.session_state.user_email,
-                    "chat_history": st.session_state.messages,
-                    "session_id": st.session_state.current_session_id
-                })
-                if res.status_code == 200:
-                    data = res.json()
-                    st.session_state.current_session_id = data.get("session_id")
-                    agent_name = data['agent'].upper()
-                    full_res = f"*🤖 Routed to: **{agent_name} AGENT***\n\n{data['response']}"
-                    process_chat_response(full_res)
-                else:
-                    st.error("Error from backend.")
-            except requests.exceptions.ConnectionError:
-                st.error("⚠️ Backend server is not reachable.")
+        
+        # Draw immediately inside the chat container so we don't need a full page rerun!
+        with chat_container:
+            st.chat_message("user").markdown(user_input)
+            
+            with st.spinner("🧠 Supervisor routing to agent..."):
+                try:
+                    res = requests.post(f"{BASE_URL}/chat", json={
+                        "message": user_input,
+                        "user_name": st.session_state.user_name,
+                        "user_email": st.session_state.user_email,
+                        "chat_history": st.session_state.messages,
+                        "session_id": st.session_state.current_session_id
+                    })
+                    if res.status_code == 200:
+                        data = res.json()
+                        st.session_state.current_session_id = data.get("session_id")
+                        agent_name = data['agent'].upper()
+                        full_res = f"*🤖 Routed to: **{agent_name} AGENT***\n\n{data['response']}"
+                        process_chat_response(full_res)
+                    else:
+                        st.error("Error from backend.")
+                except requests.exceptions.ConnectionError:
+                    st.error("⚠️ Backend server is not reachable.")
+
+    with tab2:
+        render_patient_profile(profile)
 
 
 # ════════════════════════════════════════════════════════════════

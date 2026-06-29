@@ -17,7 +17,18 @@ class Patient(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    # Future scaling ke liye: age, blood_group wagaira yahan add honge
+    profile_completed = Column(Integer, default=0) # using Integer 0/1 for boolean in sqlite safely
+    age = Column(String, nullable=True)
+    gender = Column(String, nullable=True)
+    height = Column(String, nullable=True)
+    weight = Column(String, nullable=True)
+    blood_group = Column(String, nullable=True)
+    phone_number = Column(String, nullable=True)
+    address = Column(String, nullable=True)
+    emergency_contact = Column(String, nullable=True)
+    medical_history = Column(String, nullable=True)
+    allergies = Column(String, nullable=True)
+    existing_diseases = Column(String, nullable=True)
 
 class Doctor(Base):
     __tablename__ = "doctors"
