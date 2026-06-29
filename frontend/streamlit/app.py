@@ -707,10 +707,9 @@ def doctor_dashboard():
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("Logout", type="secondary"):
-            cookie_controller.remove('auth_token')
-            cookie_controller.remove('auth_user')
-            cookie_controller.remove('auth_email')
-            cookie_controller.remove('auth_role')
+            for c in ['auth_token', 'auth_user', 'auth_email', 'auth_role']:
+                try: cookie_controller.remove(c)
+                except KeyError: pass
             st.session_state.token = None
             st.session_state.messages = []
             time.sleep(0.5)
@@ -968,10 +967,9 @@ def main_app():
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("Logout", type="secondary"):
-            cookie_controller.remove('auth_token')
-            cookie_controller.remove('auth_user')
-            cookie_controller.remove('auth_email')
-            cookie_controller.remove('auth_role')
+            for c in ['auth_token', 'auth_user', 'auth_email', 'auth_role']:
+                try: cookie_controller.remove(c)
+                except KeyError: pass
             st.session_state.token = None
             st.session_state.messages = []
             st.session_state.current_session_id = None
