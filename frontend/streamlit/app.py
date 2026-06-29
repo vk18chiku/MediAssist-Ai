@@ -306,9 +306,7 @@ html, body, [class*="css"] {
     font-size: 15px !important;
     line-height: 1.75 !important;
 }
-[data-testid="stChatMessage"] > div, 
-[data-testid="stChatMessage"] [data-testid="stChatMessageContent"],
-[data-testid="stChatMessage"] .st-emotion-cache-12w0qpk {
+[data-testid="stChatMessage"] div {
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
