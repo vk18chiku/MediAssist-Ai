@@ -287,17 +287,19 @@ html, body, [class*="css"] {
 
 /* ── Chat Messages ── */
 [data-testid="stChatMessage"] {
-    background: var(--bg-surface) !important;
-    border: 1px solid var(--border-subtle) !important;
+    background: #27272a !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 18px !important;
     margin-bottom: 14px !important;
     padding: 18px !important;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+}
+[data-testid="stChatMessage"] * {
+    color: #f8fafc !important;
 }
 [data-testid="stChatMessage"] .stMarkdown p {
     font-size: 15px !important;
     line-height: 1.75 !important;
-    color: var(--text-white) !important;
 }
 
 /* ── Chat Input ── */
