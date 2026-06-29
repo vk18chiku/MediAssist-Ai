@@ -162,11 +162,12 @@ html, body, [class*="css"] {
 }
 
 /* ── Inputs ── */
-.stTextInput > div > div > input,
-.stTextArea > div > div > textarea,
-.stNumberInput > div > div > input,
-.stSelectbox > div > div {
+.stTextInput input, .stTextInput div[data-baseweb="input"],
+.stTextArea textarea, .stTextArea div[data-baseweb="textarea"],
+.stNumberInput input, .stNumberInput div[data-baseweb="input"],
+.stSelectbox div[data-baseweb="select"] {
     background: var(--bg-surface) !important;
+    background-color: var(--bg-surface) !important;
     border: 1px solid var(--border-subtle) !important;
     border-radius: 12px !important;
     color: var(--text-white) !important;
@@ -174,8 +175,8 @@ html, body, [class*="css"] {
     font-size: 15px !important;
     box-shadow: 0 1px 2px rgba(0,0,0,0.02) !important;
 }
-.stTextInput > div > div > input:focus,
-.stTextArea > div > div > textarea:focus {
+.stTextInput input:focus, .stTextInput div[data-baseweb="input"]:focus-within,
+.stTextArea textarea:focus, .stTextArea div[data-baseweb="textarea"]:focus-within {
     border-color: var(--cyan) !important;
     box-shadow: 0 0 0 3px var(--cyan-glow) !important;
 }
