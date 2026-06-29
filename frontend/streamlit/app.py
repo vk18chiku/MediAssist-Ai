@@ -240,6 +240,15 @@ html, body, [class*="css"] {
     border-color: var(--border-dim) !important;
 }
 
+/* ── Containers (Cards) ── */
+[data-testid="stVerticalBlockBorderWrapper"], .st-emotion-cache-12w0qpk {
+    background: var(--bg-surface) !important;
+    background-color: var(--bg-surface) !important;
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+}
+
 /* ── Tabs ── */
 .stTabs [data-baseweb="tab-list"] {
     background: var(--bg-deep) !important;
