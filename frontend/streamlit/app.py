@@ -60,9 +60,16 @@ for key, default in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = default
 
-if cookie_theme and st.session_state.theme != cookie_theme:
-    st.session_state.theme = cookie_theme
+if "theme_initialized" not in st.session_state:
+    st.session_state.theme_initialized = True
+    if cookie_theme:
+        st.session_state.theme = cookie_theme
 
+if cookie_theme != st.session_state.theme and cookie_theme is not None:
+    cookie_controller.set('ui_theme', st.session_state.theme)
+
+def toggle_theme():
+    st.session_state.theme = "dark" if st.session_state.theme == "light" else "light"
 if not st.session_state.token and cookie_token:
     if cookie_email:
         st.session_state.token = cookie_token
@@ -849,12 +856,7 @@ def doctor_dashboard():
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)
         theme_icon = "🌙 Dark" if st.session_state.theme == "light" else "☀️ Light"
-        if st.button(theme_icon, key="theme_toggle_doc", use_container_width=True):
-            new_theme = "dark" if st.session_state.theme == "light" else "light"
-            st.session_state.theme = new_theme
-            cookie_controller.set('ui_theme', new_theme)
-            time.sleep(0.5)
-            st.rerun()
+        st.button(theme_icon, key="theme_toggle_doc", use_container_width=True, on_click=toggle_theme)
     with col3:
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("Logout", type="secondary", use_container_width=True):
@@ -1118,12 +1120,7 @@ def main_app():
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)
         theme_icon = "🌙 Dark" if st.session_state.theme == "light" else "☀️ Light"
-        if st.button(theme_icon, key="theme_toggle_patient", use_container_width=True):
-            new_theme = "dark" if st.session_state.theme == "light" else "light"
-            st.session_state.theme = new_theme
-            cookie_controller.set('ui_theme', new_theme)
-            time.sleep(0.5)
-            st.rerun()
+        st.button(theme_icon, key="theme_toggle_patient", use_container_width=True, on_click=toggle_theme)
     with col3:
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("Logout", type="secondary", use_container_width=True):
