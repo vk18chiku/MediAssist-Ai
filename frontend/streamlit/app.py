@@ -162,10 +162,10 @@ html, body, [class*="css"] {
 }
 
 /* ── Inputs ── */
-.stTextInput input, .stTextInput div[data-baseweb="input"],
-.stTextArea textarea, .stTextArea div[data-baseweb="textarea"],
-.stNumberInput input, .stNumberInput div[data-baseweb="input"],
-.stSelectbox div[data-baseweb="select"] {
+.stTextInput input, .stTextInput div[data-baseweb="input"], .stTextInput div[data-baseweb="base-input"],
+.stTextArea textarea, .stTextArea div[data-baseweb="textarea"], .stTextArea div[data-baseweb="base-input"],
+.stNumberInput input, .stNumberInput div[data-baseweb="input"], .stNumberInput div[data-baseweb="base-input"],
+.stSelectbox div[data-baseweb="select"], .stSelectbox div[data-baseweb="select"] > div {
     background: var(--bg-surface) !important;
     background-color: var(--bg-surface) !important;
     border: 1px solid var(--border-subtle) !important;
@@ -175,6 +175,28 @@ html, body, [class*="css"] {
     font-size: 15px !important;
     box-shadow: 0 1px 2px rgba(0,0,0,0.02) !important;
 }
+
+::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.7 !important;
+}
+
+/* Password Eye Icon and Suffix blocks */
+.stTextInput [data-baseweb="input"] > div, .stTextInput [data-baseweb="input"] button {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: var(--text-white) !important;
+}
+
+/* Dropdown popover list */
+[data-baseweb="menu"] {
+    background-color: var(--bg-elevated) !important;
+    border: 1px solid var(--border-subtle) !important;
+}
+[data-baseweb="menu"] * {
+    color: var(--text-white) !important;
+}
+
 .stTextInput input:focus, .stTextInput div[data-baseweb="input"]:focus-within,
 .stTextArea textarea:focus, .stTextArea div[data-baseweb="textarea"]:focus-within {
     border-color: var(--cyan) !important;
