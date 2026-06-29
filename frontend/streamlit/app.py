@@ -60,6 +60,8 @@ if st.session_state.theme == "dark":
     --bg-void: #09090b;
     --bg-deep: #18181b;
     --bg-surface: #27272a;
+    --chat-bg: #ffffff;
+    --chat-text: #0f172a;
     --bg-elevated: #3f3f46;
     --bg-card: rgba(39, 39, 42, 0.9);
     --bg-card-hover: rgba(63, 63, 70, 1);
@@ -89,6 +91,8 @@ else:
     --bg-void: #f8fafc;
     --bg-deep: #f1f5f9;
     --bg-surface: #ffffff;
+    --chat-bg: #27272a;
+    --chat-text: #f8fafc;
     --bg-elevated: #ffffff;
     --bg-card: rgba(255, 255, 255, 0.9);
     --bg-card-hover: rgba(255, 255, 255, 1);
@@ -287,8 +291,8 @@ html, body, [class*="css"] {
 
 /* ── Chat Messages ── */
 [data-testid="stChatMessage"] {
-    background: #ffffff !important;
-    background-color: #ffffff !important;
+    background: var(--chat-bg) !important;
+    background-color: var(--chat-bg) !important;
     border: 1px solid rgba(0, 0, 0, 0.1) !important;
     border-radius: 18px !important;
     margin-bottom: 14px !important;
@@ -296,7 +300,7 @@ html, body, [class*="css"] {
     box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
 }
 [data-testid="stChatMessage"] * {
-    color: #0f172a !important;
+    color: var(--chat-text) !important;
 }
 [data-testid="stChatMessage"] .stMarkdown p {
     font-size: 15px !important;
