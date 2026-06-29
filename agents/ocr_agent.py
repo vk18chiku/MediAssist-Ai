@@ -1,31 +1,46 @@
 # agents/ocr_agent.py
-import easyocr
-import fitz  # PyMuPDF (PDF read karne ke liye)
 import os
+import base64
+from openai import OpenAI
+from pypdf import PdfReader
+from dotenv import load_dotenv
 
-# EasyOCR ka reader initialize karna ('en' matlab English)
-# Note: gpu=False rakha hai taaki bina graphic card ke bhi chal sake
-reader = easyocr.Reader(['en'], gpu=False)
+load_dotenv()
+client = OpenAI()
+
+def encode_image(image_path: str) -> str:
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
 
 def extract_text_from_image(image_path: str) -> str:
-    """Image se text extract karne ka function"""
+    """Image se text extract karne ka function using OpenAI Vision"""
     try:
-        # EasyOCR text read karta hai
-        results = reader.readtext(image_path)
-        # Saare extracted lines ko ek string mein jodna
-        text = "\n".join([res[1] for res in results])
-        return text
+        base64_image = encode_image(image_path)
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": "Extract all the text from this image exactly as it appears."},
+                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
+                    ]
+                }
+            ]
+        )
+        return response.choices[0].message.content
     except Exception as e:
         return f"Error reading image: {e}"
 
 def extract_text_from_pdf(pdf_path: str) -> str:
-    """PDF se text extract karne ka function"""
+    """PDF se text extract karne ka function using pypdf"""
     try:
         text = ""
-        # PyMuPDF se file open karna
-        doc = fitz.open(pdf_path)
-        for page in doc:
-            text += page.get_text()
+        reader = PdfReader(pdf_path)
+        for page in reader.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text += page_text + "\n"
         return text
     except Exception as e:
         return f"Error reading PDF: {e}"
