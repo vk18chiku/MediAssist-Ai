@@ -17,7 +17,7 @@ def ask_medical_question(question: str) -> str:
     Yeh function user ka sawal lega, ChromaDB se answer dhoondega, aur AI response dega.
     """
     # 1. Database ko wapas load karna (jo ingest.py ne banaya tha)
-    embeddings = OpenAIEmbeddings()
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
     vector_store = Chroma(persist_directory=CHROMA_DB_PATH, embedding_function=embeddings)
     
     # Retriever banana (jo sabse relevant 3 paragraph dhoondh kar layega)

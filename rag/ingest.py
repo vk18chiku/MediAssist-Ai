@@ -40,7 +40,7 @@ def ingest_medical_docs(directory: str = "medical_docs"):
     print("⏳ Isme thoda time lag sakta hai, please wait...")
     
     # OpenAI ka use karke text ko numbers (vectors) mein convert karna
-    embeddings = OpenAIEmbeddings()
+    embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
     
     # Data ko ChromaDB mein save karna
     vector_db = Chroma.from_documents(

@@ -45,11 +45,11 @@ jinja2
 # OPTIONAL - Heavy packages (install separately if needed)
 # ============================================================
 chromadb==0.5.0
-sentence-transformers==3.0.0
-easyocr==1.7.1
+# sentence-transformers==3.0.0
+# easyocr==1.7.1
 Pillow==10.3.0
-PyMuPDF==1.24.4
-openai-whisper
-pydub==0.25.1
+# PyMuPDF==1.24.4
+# openai-whisper
+# pydub==0.25.1
 streamlit>=1.39.0
 plotly==5.22.0
