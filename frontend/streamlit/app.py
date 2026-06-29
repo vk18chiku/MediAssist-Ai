@@ -287,22 +287,24 @@ html, body, [class*="css"] {
 
 /* ── Chat Messages ── */
 [data-testid="stChatMessage"] {
-    background: #27272a !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
     border-radius: 18px !important;
     margin-bottom: 14px !important;
     padding: 18px !important;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
 }
 [data-testid="stChatMessage"] * {
-    color: #f8fafc !important;
+    color: #0f172a !important;
 }
 [data-testid="stChatMessage"] .stMarkdown p {
     font-size: 15px !important;
     line-height: 1.75 !important;
 }
-[data-testid="stChatMessage"] .st-emotion-cache-12w0qpk, 
-[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] {
+[data-testid="stChatMessage"] > div, 
+[data-testid="stChatMessage"] [data-testid="stChatMessageContent"],
+[data-testid="stChatMessage"] .st-emotion-cache-12w0qpk {
     background-color: transparent !important;
     border: none !important;
     box-shadow: none !important;
