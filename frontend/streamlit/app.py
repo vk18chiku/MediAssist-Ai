@@ -120,31 +120,8 @@ st.markdown(f"""
 
 :root {{
     {css_vars}
-    --bg-void: #f8fafc;
-    --bg-deep: #f1f5f9;
-    --bg-surface: #ffffff;
-    --bg-elevated: #ffffff;
-    --bg-card: rgba(255, 255, 255, 0.9);
-    --bg-card-hover: rgba(255, 255, 255, 1);
-    --border-dim: rgba(15, 23, 42, 0.05);
-    --border-subtle: rgba(15, 23, 42, 0.08);
-    --border-glow: rgba(14, 165, 233, 0.3);
-    --cyan: #00d1b2;
-    --cyan-dim: #00e6c3;
-    --cyan-glow: rgba(0, 209, 178, 0.15);
-    --cyan-deep-glow: rgba(0, 209, 178, 0.05);
-    --violet: #8b5cf6;
-    --violet-dim: #a78bfa;
-    --violet-glow: rgba(139, 92, 246, 0.15);
-    --emerald: #10b981;
-    --emerald-glow: rgba(16, 185, 129, 0.15);
-    --amber: #f59e0b;
-    --rose: #ef4444;
-    --text-white: #0f172a; /* Keeping variable name but changing color to dark for light theme */
-    --text-secondary: #475569;
-    --text-muted: #64748b;
-    --gradient-hero: linear-gradient(135deg, #00d1b2 0%, #00b89c 100%);
-}
+}}
+""" + """
 
 /* ── Global ── */
 html, body, [class*="css"] {
