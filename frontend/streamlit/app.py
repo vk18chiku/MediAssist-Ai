@@ -22,6 +22,7 @@ defaults = {
     "token": None, "user_name": None, "user_email": None, "role": None,
     "messages": [], "forgot_password_mode": False, "otp_sent": False,
     "reset_email": "", "signup_otp_sent": False, "current_session_id": None,
+    "theme": "light",
 }
 
 from streamlit_cookies_controller import CookieController
@@ -33,10 +34,14 @@ cookie_token = cookie_controller.get('auth_token')
 cookie_user = cookie_controller.get('auth_user')
 cookie_email = cookie_controller.get('auth_email')
 cookie_role = cookie_controller.get('auth_role')
+cookie_theme = cookie_controller.get('ui_theme')
 
 for key, default in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = default
+
+if cookie_theme and st.session_state.theme != cookie_theme:
+    st.session_state.theme = cookie_theme
 
 if not st.session_state.token and cookie_token:
     if cookie_email:
@@ -49,11 +54,72 @@ if not st.session_state.token and cookie_token:
 # ════════════════════════════════════════════════════════════════
 # ULTRA-PREMIUM CSS — Advanced AI Platform UI
 # ════════════════════════════════════════════════════════════════
-st.markdown("""
+
+if st.session_state.theme == "dark":
+    css_vars = """
+    --bg-void: #09090b;
+    --bg-deep: #18181b;
+    --bg-surface: #27272a;
+    --bg-elevated: #3f3f46;
+    --bg-card: rgba(39, 39, 42, 0.9);
+    --bg-card-hover: rgba(63, 63, 70, 1);
+    --border-dim: rgba(255, 255, 255, 0.05);
+    --border-subtle: rgba(255, 255, 255, 0.08);
+    --border-glow: rgba(14, 165, 233, 0.3);
+    --cyan: #00d1b2;
+    --cyan-dim: #00e6c3;
+    --cyan-glow: rgba(0, 209, 178, 0.15);
+    --cyan-deep-glow: rgba(0, 209, 178, 0.05);
+    --violet: #8b5cf6;
+    --violet-dim: #a78bfa;
+    --violet-glow: rgba(139, 92, 246, 0.15);
+    --emerald: #10b981;
+    --emerald-glow: rgba(16, 185, 129, 0.15);
+    --amber: #f59e0b;
+    --rose: #ef4444;
+    --text-white: #f8fafc;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
+    --gradient-hero: linear-gradient(135deg, #00d1b2 0%, #00b89c 100%);
+    --gradient-btn: linear-gradient(135deg, #00d1b2 0%, #00b89c 100%);
+    --gradient-card: linear-gradient(160deg, #18181b 0%, #09090b 100%);
+    """
+else:
+    css_vars = """
+    --bg-void: #f8fafc;
+    --bg-deep: #f1f5f9;
+    --bg-surface: #ffffff;
+    --bg-elevated: #ffffff;
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-card-hover: rgba(255, 255, 255, 1);
+    --border-dim: rgba(15, 23, 42, 0.05);
+    --border-subtle: rgba(15, 23, 42, 0.08);
+    --border-glow: rgba(14, 165, 233, 0.3);
+    --cyan: #00d1b2;
+    --cyan-dim: #00e6c3;
+    --cyan-glow: rgba(0, 209, 178, 0.15);
+    --cyan-deep-glow: rgba(0, 209, 178, 0.05);
+    --violet: #8b5cf6;
+    --violet-dim: #a78bfa;
+    --violet-glow: rgba(139, 92, 246, 0.15);
+    --emerald: #10b981;
+    --emerald-glow: rgba(16, 185, 129, 0.15);
+    --amber: #f59e0b;
+    --rose: #ef4444;
+    --text-white: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --gradient-hero: linear-gradient(135deg, #00d1b2 0%, #00b89c 100%);
+    --gradient-btn: linear-gradient(135deg, #00d1b2 0%, #00b89c 100%);
+    --gradient-card: linear-gradient(160deg, #ffffff 0%, #f8fafc 100%);
+    """
+
+st.markdown(f"""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-:root {
+:root {{
+    {css_vars}
     --bg-void: #f8fafc;
     --bg-deep: #f1f5f9;
     --bg-surface: #ffffff;
@@ -78,8 +144,6 @@ st.markdown("""
     --text-secondary: #475569;
     --text-muted: #64748b;
     --gradient-hero: linear-gradient(135deg, #00d1b2 0%, #00b89c 100%);
-    --gradient-btn: linear-gradient(135deg, #00d1b2 0%, #00b89c 100%);
-    --gradient-card: linear-gradient(160deg, #ffffff 0%, #f8fafc 100%);
 }
 
 /* ── Global ── */
@@ -674,7 +738,7 @@ def doctor_dashboard():
     profile = res.json() if res.status_code == 200 else {}
 
     # Header
-    col1, col2 = st.columns([8, 1])
+    col1, col2, col3 = st.columns([7, 1, 1])
     with col1:
         safe_name = profile.get('name') or st.session_state.user_name or "Doctor"
         avatar_url = f"https://ui-avatars.com/api/?name={safe_name.replace(' ', '+')}&background=6366f1&color=fff&size=128&bold=true&format=svg"
@@ -698,7 +762,7 @@ def doctor_dashboard():
                             <div style="color:var(--text-secondary); font-size:12px; margin-top:2px;">📞 {profile.get('contact_number') or 'N/A'}</div>
                         </div>
                     </div>
-                    <div style="margin-top:16px; color:var(--text-secondary); font-size:13px; line-height:1.6; background:#f8fafc; padding:12px 16px; border-radius:10px; border:1px solid var(--border-subtle);">
+                    <div style="margin-top:16px; color:var(--text-secondary); font-size:13px; line-height:1.6; background:var(--bg-void); padding:12px 16px; border-radius:10px; border:1px solid var(--border-subtle);">
                         {profile.get('bio') or '<em>No bio provided. Update your profile below.</em>'}
                     </div>
                 </div>
@@ -707,7 +771,16 @@ def doctor_dashboard():
         """, unsafe_allow_html=True)
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("Logout", type="secondary"):
+        theme_icon = "🌙 Dark" if st.session_state.theme == "light" else "☀️ Light"
+        if st.button(theme_icon, key="theme_toggle_doc", use_container_width=True):
+            new_theme = "dark" if st.session_state.theme == "light" else "light"
+            st.session_state.theme = new_theme
+            cookie_controller.set('ui_theme', new_theme)
+            time.sleep(0.5)
+            st.rerun()
+    with col3:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("Logout", type="secondary", use_container_width=True):
             for c in ['auth_token', 'auth_user', 'auth_email', 'auth_role']:
                 try: cookie_controller.remove(c)
                 except KeyError: pass
@@ -950,7 +1023,7 @@ def main_app():
     ''', unsafe_allow_html=True)
 
     # Top bar
-    col1, col2 = st.columns([8, 1])
+    col1, col2, col3 = st.columns([7, 1, 1])
     with col1:
         safe_name = st.session_state.user_name or "User"
         avatar_url = f"https://ui-avatars.com/api/?name={safe_name.replace(' ', '+')}&background=6366f1&color=fff&size=128&bold=true&format=svg"
@@ -967,7 +1040,16 @@ def main_app():
         ''', unsafe_allow_html=True)
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("Logout", type="secondary"):
+        theme_icon = "🌙 Dark" if st.session_state.theme == "light" else "☀️ Light"
+        if st.button(theme_icon, key="theme_toggle_patient", use_container_width=True):
+            new_theme = "dark" if st.session_state.theme == "light" else "light"
+            st.session_state.theme = new_theme
+            cookie_controller.set('ui_theme', new_theme)
+            time.sleep(0.5)
+            st.rerun()
+    with col3:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("Logout", type="secondary", use_container_width=True):
             for c in ['auth_token', 'auth_user', 'auth_email', 'auth_role']:
                 try: cookie_controller.remove(c)
                 except KeyError: pass
