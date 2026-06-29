@@ -1,40 +1,41 @@
 # backend/email_service.py
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 import os
+import requests
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# SMTP Configuration from Environment Variables
-SMTP_SERVER = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-SMTP_PORT = int(os.getenv("SMTP_PORT", 587))
-SMTP_USERNAME = os.getenv("SMTP_USERNAME")
-SMTP_PASSWORD = os.getenv("SMTP_PASSWORD")
-SENDER_EMAIL = os.getenv("SENDER_EMAIL", SMTP_USERNAME)
+# Resend HTTP API Configuration
+RESEND_API_KEY = os.getenv("SMTP_PASSWORD")  # Your Resend API key (re_...)
+SENDER_EMAIL = os.getenv("SENDER_EMAIL", "onboarding@resend.dev")
 
 def send_real_email(to_email, subject, body):
-    if not SMTP_USERNAME or not SMTP_PASSWORD:
-        print("❌ SMTP Credentials missing. Please set SMTP_USERNAME and SMTP_PASSWORD.")
+    if not RESEND_API_KEY:
+        print("❌ RESEND API KEY missing. Please set SMTP_PASSWORD env variable.")
         return False
 
     try:
-        msg = MIMEMultipart()
-        msg['From'] = f"MediAssist AI <{SENDER_EMAIL}>"
-        msg['To'] = to_email
-        msg['Subject'] = subject
-        msg.attach(MIMEText(body, 'plain'))
+        response = requests.post(
+            "https://api.resend.com/emails",
+            headers={
+                "Authorization": f"Bearer {RESEND_API_KEY}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "from": f"MediAssist AI <{SENDER_EMAIL}>",
+                "to": [to_email],
+                "subject": subject,
+                "text": body
+            },
+            timeout=10
+        )
 
-        # SMTP Server connect karna
-        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-        server.starttls()
-        server.login(SMTP_USERNAME, SMTP_PASSWORD)
-        server.send_message(msg)
-        server.quit()
-        
-        print(f"✅ Real Email sent successfully to {to_email}")
-        return True
+        if response.status_code == 200:
+            print(f"✅ Email sent successfully to {to_email}")
+            return True
+        else:
+            print(f"❌ Resend API error ({response.status_code}): {response.text}")
+            return False
     except Exception as e:
         print(f"❌ Failed to send email: {e}")
         return False
