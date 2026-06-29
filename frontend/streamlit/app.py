@@ -466,6 +466,9 @@ hr { border-color: var(--border-dim) !important; }
     border-radius: 12px !important;
     color: var(--text-white) !important;
 }
+[data-testid="stFileUploader"] > section, [data-testid="stFileUploaderDropzone"] {
+    background-color: var(--bg-surface) !important;
+}
 [data-testid="stFileUploader"] * {
     color: var(--text-white) !important;
 }
@@ -480,6 +483,15 @@ hr { border-color: var(--border-dim) !important; }
 [data-testid="stChatInput"] svg {
     color: var(--text-white) !important;
 }
+
+/* ── Bottom Chat Container ── */
+[data-testid="stBottom"], [data-testid="stBottomBlockContainer"] {
+    background: var(--bg-void) !important;
+}
+[data-testid="stBottom"] > div {
+    background: transparent !important;
+}
+
 
 .ai-header h1 {
     font-size: 3.5rem;
@@ -1170,7 +1182,7 @@ def main_app():
             chat_container = st.container(height=500)
             with chat_container:
                 if not st.session_state.messages:
-                    st.chat_message("assistant").markdown(f"Hello **{st.session_state.user_name}** 👋\n\nI'm your AI health assistant powered by a **multi-agent system**. The Supervisor will automatically route your query to the right specialist agent.\n\nHow can I help you today?")
+                    st.chat_message("assistant").markdown(f"Hello **{st.session_state.user_name}** 👋\n\nI'm your AI health assistant powered by a **multi-agent system**. The Supervisor will automatically route your query to the right specialist agent.\n\n💡 **Tip:** *You can book an appointment instantly by telling me the doctor's name, date, and time!* \n\nHow can I help you today?")
                 
                 for message in st.session_state.messages:
                     with st.chat_message(message["role"]):
