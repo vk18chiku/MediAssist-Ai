@@ -29,12 +29,32 @@ from streamlit_cookies_controller import CookieController
 import time
 cookie_controller = CookieController()
 
-# Get from cookie
-cookie_token = cookie_controller.get('auth_token')
-cookie_user = cookie_controller.get('auth_user')
-cookie_email = cookie_controller.get('auth_email')
-cookie_role = cookie_controller.get('auth_role')
-cookie_theme = cookie_controller.get('ui_theme')
+cookie_token = None
+cookie_user = None
+cookie_email = None
+cookie_role = None
+cookie_theme = None
+
+# Native Streamlit cookies (1.38+) read instantly from HTTP headers without JS delay
+if hasattr(st, "context") and hasattr(st.context, "cookies"):
+    _cookies = st.context.cookies
+    cookie_token = _cookies.get('auth_token')
+    cookie_user = _cookies.get('auth_user')
+    cookie_email = _cookies.get('auth_email')
+    cookie_role = _cookies.get('auth_role')
+    cookie_theme = _cookies.get('ui_theme')
+
+# Fallback to JS controller for older Streamlit versions (like localhost 1.35)
+if not cookie_token:
+    cookie_token = cookie_controller.get('auth_token')
+if not cookie_user:
+    cookie_user = cookie_controller.get('auth_user')
+if not cookie_email:
+    cookie_email = cookie_controller.get('auth_email')
+if not cookie_role:
+    cookie_role = cookie_controller.get('auth_role')
+if not cookie_theme:
+    cookie_theme = cookie_controller.get('ui_theme')
 
 for key, default in defaults.items():
     if key not in st.session_state:
