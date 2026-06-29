@@ -14,15 +14,34 @@ if platform.system() == "Windows":
 else:
     BASE_URL = os.environ.get("BACKEND_URL", "http://mediassist_backend:8000")
 
+if BASE_URL.endswith("/"):
+    BASE_URL = BASE_URL[:-1]
+
 # --- Session State Init ---
 defaults = {
     "token": None, "user_name": None, "user_email": None, "role": None,
     "messages": [], "forgot_password_mode": False, "otp_sent": False,
     "reset_email": "", "signup_otp_sent": False, "current_session_id": None,
 }
+
+from streamlit_cookies_controller import CookieController
+cookie_controller = CookieController()
+
+# Get from cookie
+cookie_token = cookie_controller.get('auth_token')
+cookie_user = cookie_controller.get('auth_user')
+cookie_email = cookie_controller.get('auth_email')
+cookie_role = cookie_controller.get('auth_role')
+
 for key, default in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = default
+
+if not st.session_state.token and cookie_token:
+    st.session_state.token = cookie_token
+    st.session_state.user_name = cookie_user
+    st.session_state.user_email = cookie_email
+    st.session_state.role = cookie_role
 
 
 # ════════════════════════════════════════════════════════════════
@@ -499,20 +518,23 @@ def auth_screen():
                     new_password_input = st.text_input("New Password", type="password")
                     if st.form_submit_button("Reset Password", type="primary"):
                         if otp_input and new_password_input:
-                            with st.spinner("Resetting..."):
-                                res = requests.post(f"{BASE_URL}/auth/reset-password", json={
-                                    "email": st.session_state.reset_email,
-                                    "otp": otp_input,
-                                    "new_password": new_password_input
-                                })
-                            if res.status_code == 200:
-                                st.success("Password reset! You can now login.")
-                                st.session_state.forgot_password_mode = False
-                                st.session_state.otp_sent = False
-                                st.rerun()
+                            if len(new_password_input) < 6:
+                                st.error("Password must be at least 6 characters.")
                             else:
-                                try: st.error(res.json().get("detail", "Failed to reset."))
-                                except: st.error("Server error.")
+                                with st.spinner("Resetting..."):
+                                    res = requests.post(f"{BASE_URL}/auth/reset-password", json={
+                                        "email": st.session_state.reset_email,
+                                        "otp": otp_input,
+                                        "new_password": new_password_input
+                                    })
+                                if res.status_code == 200:
+                                    st.success("Password reset! You can now login.")
+                                    st.session_state.forgot_password_mode = False
+                                    st.session_state.otp_sent = False
+                                    st.rerun()
+                                else:
+                                    try: st.error(res.json().get("detail", "Failed to reset."))
+                                    except: st.error("Server error.")
                         else:
                             st.error("Please fill in all fields.")
 
@@ -540,11 +562,15 @@ def auth_screen():
                                 st.session_state.user_name = data["name"]
                                 st.session_state.user_email = log_email
                                 st.session_state.role = data["role"]
+                                cookie_controller.set('auth_token', data["access_token"])
+                                cookie_controller.set('auth_user', data["name"])
+                                cookie_controller.set('auth_email', log_email)
+                                cookie_controller.set('auth_role', data["role"])
                                 st.success(f"Welcome back, {data['name']}!")
                                 st.rerun()
                             else:
                                 try: st.error(res.json().get("detail", "Invalid credentials."))
-                                except: st.error("Server error. Please try again.")
+                                except: st.error(f"Server error: {res.status_code} - {res.text[:100]}")
                         except requests.exceptions.ConnectionError:
                             st.error("⚠️ Backend server is not running. Please start the backend first.")
 
@@ -570,18 +596,21 @@ def auth_screen():
                 submit_signup = st.button("Send OTP to Email", type="primary")
                 if submit_signup:
                     if reg_name and reg_email and reg_password:
-                        with st.spinner("Sending OTP..."):
-                            try:
-                                res = requests.post(f"{BASE_URL}/auth/signup-send-otp", json={"email": reg_email}, timeout=15)
-                                if res.status_code == 200:
-                                    st.session_state.signup_otp_sent = True
-                                    st.success("OTP sent!")
-                                    st.rerun()
-                                else:
-                                    try: st.error(res.json().get("detail", "Could not send OTP."))
-                                    except: st.error("Server error.")
-                            except requests.exceptions.ConnectionError:
-                                st.error("⚠️ Backend server is not running.")
+                        if len(reg_password) < 6:
+                            st.error("Password must be at least 6 characters.")
+                        else:
+                            with st.spinner("Sending OTP..."):
+                                try:
+                                    res = requests.post(f"{BASE_URL}/auth/signup-send-otp", json={"email": reg_email}, timeout=15)
+                                    if res.status_code == 200:
+                                        st.session_state.signup_otp_sent = True
+                                        st.success("OTP sent!")
+                                        st.rerun()
+                                    else:
+                                        try: st.error(res.json().get("detail", "Could not send OTP."))
+                                        except: st.error(f"Server error: {res.status_code} - {res.text[:100]}")
+                                except requests.exceptions.ConnectionError:
+                                    st.error("⚠️ Backend server is not running.")
                     else:
                         st.error("Please fill all fields.")
             else:
@@ -599,12 +628,16 @@ def auth_screen():
                             st.session_state.user_name = data["name"]
                             st.session_state.user_email = reg_email
                             st.session_state.role = data["role"]
+                            cookie_controller.set('auth_token', data["access_token"])
+                            cookie_controller.set('auth_user', data["name"])
+                            cookie_controller.set('auth_email', reg_email)
+                            cookie_controller.set('auth_role', data["role"])
                             st.session_state.signup_otp_sent = False
                             st.success(f"Welcome, {data['name']}!")
                             st.rerun()
                         else:
                             try: st.error(res.json().get("detail", "Signup failed."))
-                            except: st.error("Server error.")
+                            except: st.error(f"Server error: {res.status_code} - {res.text[:100]}")
                     else:
                         st.error("Please enter the OTP.")
 
@@ -670,6 +703,10 @@ def doctor_dashboard():
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("Logout", type="secondary"):
+            cookie_controller.remove('auth_token')
+            cookie_controller.remove('auth_user')
+            cookie_controller.remove('auth_email')
+            cookie_controller.remove('auth_role')
             st.session_state.token = None
             st.session_state.messages = []
             st.rerun()
@@ -925,6 +962,10 @@ def main_app():
     with col2:
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("Logout", type="secondary"):
+            cookie_controller.remove('auth_token')
+            cookie_controller.remove('auth_user')
+            cookie_controller.remove('auth_email')
+            cookie_controller.remove('auth_role')
             st.session_state.token = None
             st.session_state.messages = []
             st.session_state.current_session_id = None
