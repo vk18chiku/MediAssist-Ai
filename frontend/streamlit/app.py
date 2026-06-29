@@ -258,7 +258,10 @@ html, body, [class*="css"] {
 }
 
 /* ── Containers (Cards) ── */
-[data-testid="stVerticalBlockBorderWrapper"], .st-emotion-cache-12w0qpk {
+[data-testid="stVerticalBlockBorderWrapper"], 
+[data-testid="stVerticalBlockBorderWrapper"] > div,
+div[data-testid="stVerticalBlock"]:has(.custom-card-marker),
+.st-emotion-cache-12w0qpk {
     background: var(--bg-surface) !important;
     background-color: var(--bg-surface) !important;
     border: 1px solid var(--border-subtle) !important;
@@ -968,7 +971,7 @@ def doctor_dashboard():
 # PATIENT PROFILE
 # ════════════════════════════════════════════════════════════════
 def render_patient_profile(profile):
-    st.markdown("### ⚙️ My Profile")
+    st.markdown("<h3 style='color: white;'>⚙️ My Profile</h3>", unsafe_allow_html=True)
     st.markdown("<div style='color:var(--text-secondary); font-size:13px; margin-bottom:16px;'>Complete your medical profile for better AI assistance.</div>", unsafe_allow_html=True)
     
     with st.form("patient_profile_form"):
@@ -1015,7 +1018,7 @@ def render_patient_profile(profile):
 # PATIENT PROFILE
 # ════════════════════════════════════════════════════════════════
 def render_patient_profile(profile):
-    st.markdown("### ⚙️ My Profile")
+    st.markdown("<h3 style='color: white;'>⚙️ My Profile</h3>", unsafe_allow_html=True)
     st.markdown("<div style='color:var(--text-secondary); font-size:13px; margin-bottom:16px;'>Complete your medical profile for better AI assistance.</div>", unsafe_allow_html=True)
     
     with st.form("patient_profile_form"):
@@ -1201,6 +1204,7 @@ def main_app():
                                 # Clean card styling
                                 with st.container(border=True):
                                     st.markdown(f'''
+                                    <span class="custom-card-marker" style="display:none;"></span>
                                     <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
                                         <img src="{doc_avatar}" style="border-radius:8px; width:48px; height:48px;">
                                         <div>
