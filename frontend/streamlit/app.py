@@ -39,10 +39,11 @@ for key, default in defaults.items():
         st.session_state[key] = default
 
 if not st.session_state.token and cookie_token:
-    st.session_state.token = cookie_token
-    st.session_state.user_name = cookie_user
-    st.session_state.user_email = cookie_email
-    st.session_state.role = cookie_role
+    if cookie_email:
+        st.session_state.token = cookie_token
+        st.session_state.user_name = cookie_user
+        st.session_state.user_email = cookie_email
+        st.session_state.role = cookie_role
 
 
 # ════════════════════════════════════════════════════════════════
