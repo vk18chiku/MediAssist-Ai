@@ -128,6 +128,7 @@ html, body, [class*="css"] {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
     -webkit-font-smoothing: antialiased;
     color: var(--text-white) !important;
+    transition: background-color 0.3s ease, color 0.3s ease !important;
 }
 
 /* ── Scrollbar ── */
@@ -143,6 +144,7 @@ html, body, [class*="css"] {
         radial-gradient(ellipse 80% 50% at 20% 20%, rgba(14, 165, 233, 0.05) 0%, transparent 50%),
         radial-gradient(ellipse 60% 40% at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%) !important;
     min-height: 100vh;
+    transition: background 0.4s ease !important;
 }
 #MainMenu, footer, header { visibility: hidden; }
 
@@ -258,6 +260,7 @@ html, body, [class*="css"] {
     border: 1px solid var(--border-subtle) !important;
     border-radius: 12px !important;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05) !important;
+    transition: background-color 0.3s ease, border-color 0.3s ease !important;
 }
 
 /* ── Tabs ── */
