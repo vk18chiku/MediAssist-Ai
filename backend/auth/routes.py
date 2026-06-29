@@ -91,7 +91,9 @@ def signup_send_otp(data: SendSignupOTPRequest, db: Session = Depends(get_db)):
     
     subject = "Verify your email - MediAssist AI"
     body = f"Hello,\n\nYour OTP to verify your email and create an account is: {otp}\n\nThis OTP is valid for 15 minutes."
-    send_real_email(data.email, subject, body)
+    success = send_real_email(data.email, subject, body)
+    if not success:
+        raise HTTPException(status_code=500, detail="Failed to send OTP email. Please check SMTP configuration.")
     
     return {"msg": "OTP sent successfully"}
 
@@ -167,7 +169,9 @@ def forgot_password(data: ForgotPasswordRequest, db: Session = Depends(get_db)):
     
     subject = "Password Reset OTP - MediAssist AI"
     body = f"Hello {user.name},\n\nYour OTP for resetting your password is: {otp}\n\nThis OTP is valid for 15 minutes."
-    send_real_email(user.email, subject, body)
+    success = send_real_email(user.email, subject, body)
+    if not success:
+        raise HTTPException(status_code=500, detail="Failed to send password reset email.")
     
     return {"msg": "If the email is registered, an OTP has been sent."}
 
