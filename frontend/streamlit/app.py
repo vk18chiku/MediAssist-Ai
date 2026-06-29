@@ -301,6 +301,12 @@ html, body, [class*="css"] {
     font-size: 15px !important;
     line-height: 1.75 !important;
 }
+[data-testid="stChatMessage"] .st-emotion-cache-12w0qpk, 
+[data-testid="stChatMessage"] [data-testid="stChatMessageContent"] {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
 
 /* ── Chat Input ── */
 [data-testid="stChatInput"] > div {
