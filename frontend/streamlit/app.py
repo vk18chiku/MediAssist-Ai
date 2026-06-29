@@ -572,7 +572,7 @@ def auth_screen():
                     if reg_name and reg_email and reg_password:
                         with st.spinner("Sending OTP..."):
                             try:
-                                res = requests.post(f"{BASE_URL}/auth/signup-send-otp", json={"email": reg_email})
+                                res = requests.post(f"{BASE_URL}/auth/signup-send-otp", json={"email": reg_email}, timeout=15)
                                 if res.status_code == 200:
                                     st.session_state.signup_otp_sent = True
                                     st.success("OTP sent!")
