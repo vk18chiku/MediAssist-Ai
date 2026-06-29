@@ -25,6 +25,7 @@ defaults = {
 }
 
 from streamlit_cookies_controller import CookieController
+import time
 cookie_controller = CookieController()
 
 # Get from cookie
@@ -567,6 +568,7 @@ def auth_screen():
                                 cookie_controller.set('auth_email', log_email)
                                 cookie_controller.set('auth_role', data["role"])
                                 st.success(f"Welcome back, {data['name']}!")
+                                time.sleep(0.5)
                                 st.rerun()
                             else:
                                 try: st.error(res.json().get("detail", "Invalid credentials."))
@@ -634,6 +636,7 @@ def auth_screen():
                             cookie_controller.set('auth_role', data["role"])
                             st.session_state.signup_otp_sent = False
                             st.success(f"Welcome, {data['name']}!")
+                            time.sleep(0.5)
                             st.rerun()
                         else:
                             try: st.error(res.json().get("detail", "Signup failed."))
@@ -709,6 +712,7 @@ def doctor_dashboard():
             cookie_controller.remove('auth_role')
             st.session_state.token = None
             st.session_state.messages = []
+            time.sleep(0.5)
             st.rerun()
 
 
@@ -969,6 +973,7 @@ def main_app():
             st.session_state.token = None
             st.session_state.messages = []
             st.session_state.current_session_id = None
+            time.sleep(0.5)
             st.rerun()
 
 
