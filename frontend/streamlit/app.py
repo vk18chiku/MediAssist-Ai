@@ -675,7 +675,8 @@ def doctor_dashboard():
     # Header
     col1, col2 = st.columns([8, 1])
     with col1:
-        avatar_url = f"https://ui-avatars.com/api/?name={profile.get('name', st.session_state.user_name).replace(' ', '+')}&background=6366f1&color=fff&size=128&bold=true&format=svg"
+        safe_name = profile.get('name') or st.session_state.user_name or "Doctor"
+        avatar_url = f"https://ui-avatars.com/api/?name={safe_name.replace(' ', '+')}&background=6366f1&color=fff&size=128&bold=true&format=svg"
         st.markdown(f"""
         <div class="profile-card fade-in">
             <div style="display:flex; gap:20px; align-items:flex-start;">
@@ -684,7 +685,7 @@ def doctor_dashboard():
                     <div style="display:flex; justify-content:space-between; align-items:flex-start;">
                         <div>
                             <h2 style="margin:0 0 6px 0; color:var(--text-white); font-size:1.5rem; font-weight:800; letter-spacing:-0.02em;">
-                                Dr. {profile.get('name', st.session_state.user_name)}
+                                Dr. {safe_name}
                             </h2>
                             <span class="agent-badge" style="background:rgba(16,185,129,0.1); color:#10b981; border-color:rgba(16,185,129,0.2);">
                                 {profile.get('specialization', 'Doctor')}
@@ -951,13 +952,14 @@ def main_app():
     # Top bar
     col1, col2 = st.columns([8, 1])
     with col1:
-        avatar_url = f"https://ui-avatars.com/api/?name={st.session_state.user_name.replace(' ', '+')}&background=6366f1&color=fff&size=128&bold=true&format=svg"
+        safe_name = st.session_state.user_name or "User"
+        avatar_url = f"https://ui-avatars.com/api/?name={safe_name.replace(' ', '+')}&background=6366f1&color=fff&size=128&bold=true&format=svg"
         st.markdown(f'''
         <div style="display:flex; align-items:center; gap:14px; padding:0px 0 10px 0; animation: fadeIn 0.4s ease-out;">
             <img src="{avatar_url}" style="border-radius:12px; width:48px; height:48px; border:2px solid var(--accent); box-shadow: 0 0 12px var(--accent-glow);">
             <div>
                 <h2 style="margin:0; color:var(--text-white); font-size:1.3rem; font-weight:800; letter-spacing:-0.02em;">
-                    {st.session_state.user_name}
+                    {safe_name}
                 </h2>
                 <p style="margin:0; color:var(--text-secondary); font-size:12px;">Patient Dashboard</p>
             </div>
