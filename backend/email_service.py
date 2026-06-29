@@ -55,7 +55,7 @@ def _send_via_resend(to_email, subject, body):
 def send_real_email(to_email, subject, body):
     if not EMAIL_API_KEY:
         print("❌ EMAIL_API_KEY missing. Please set it in environment variables.")
-        return False
+        return False, "EMAIL_API_KEY is not set in environment variables."
 
     try:
         if EMAIL_PROVIDER == "resend":
@@ -65,10 +65,12 @@ def send_real_email(to_email, subject, body):
 
         if response.status_code in [200, 201]:
             print(f"✅ Email sent successfully to {to_email} via {EMAIL_PROVIDER}")
-            return True
+            return True, "OK"
         else:
-            print(f"❌ {EMAIL_PROVIDER} API error ({response.status_code}): {response.text}")
-            return False
+            error_msg = f"{EMAIL_PROVIDER} error ({response.status_code}): {response.text}"
+            print(f"❌ {error_msg}")
+            return False, error_msg
     except Exception as e:
-        print(f"❌ Failed to send email: {e}")
-        return False
+        error_msg = f"Exception: {str(e)}"
+        print(f"❌ Failed to send email: {error_msg}")
+        return False, error_msg
