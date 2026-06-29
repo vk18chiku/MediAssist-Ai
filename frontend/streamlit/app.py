@@ -166,7 +166,7 @@ html, body, [class*="css"] {
 .stTextArea > div > div > textarea,
 .stNumberInput > div > div > input,
 .stSelectbox > div > div {
-    background: #ffffff !important;
+    background: var(--bg-surface) !important;
     border: 1px solid var(--border-subtle) !important;
     border-radius: 12px !important;
     color: var(--text-white) !important;
@@ -207,19 +207,19 @@ html, body, [class*="css"] {
     box-shadow: 0 6px 15px rgba(14, 165, 233, 0.3) !important;
 }
 .stButton > button[kind="secondary"] {
-    background: #ffffff !important;
+    background: var(--bg-surface) !important;
     color: var(--text-white) !important;
     border: 1px solid var(--border-subtle) !important;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05) !important;
 }
 .stButton > button[kind="secondary"]:hover {
-    background: #f8fafc !important;
+    background: var(--bg-elevated) !important;
     border-color: var(--border-dim) !important;
 }
 
 /* ── Tabs ── */
 .stTabs [data-baseweb="tab-list"] {
-    background: rgba(15, 23, 42, 0.03) !important;
+    background: var(--bg-deep) !important;
     border-radius: 14px !important;
     padding: 5px !important;
     gap: 4px !important;
@@ -233,7 +233,7 @@ html, body, [class*="css"] {
     padding: 10px 24px !important;
 }
 .stTabs [aria-selected="true"] {
-    background: #ffffff !important;
+    background: var(--bg-surface) !important;
     color: var(--text-white) !important;
     box-shadow: 0 2px 8px rgba(0,0,0,0.05) !important;
     border: 1px solid var(--border-dim) !important;
@@ -416,7 +416,7 @@ html, body, [class*="css"] {
 
 /* System Info Bar */
 .system-info {
-    background: #ffffff;
+    background: var(--bg-surface);
     border: 1px solid var(--border-subtle);
     border-radius: 12px;
     padding: 12px 16px;
@@ -438,7 +438,7 @@ html, body, [class*="css"] {
     flex-wrap: wrap;
 }
 .pipeline-node {
-    background: #f1f5f9;
+    background: var(--bg-deep);
     border: 1px solid var(--border-dim);
     border-radius: 8px;
     padding: 6px 12px;
@@ -459,9 +459,9 @@ hr { border-color: var(--border-dim) !important; }
 .fade-in { animation: fadeIn 0.4s ease; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ── Force Light Mode on Streamlit Defaults ── */
+/* ── File Uploader ── */
 [data-testid="stFileUploader"] {
-    background-color: #ffffff !important;
+    background-color: var(--bg-surface) !important;
     border: 1px dashed var(--cyan) !important;
     border-radius: 12px !important;
     color: var(--text-white) !important;
@@ -471,14 +471,14 @@ hr { border-color: var(--border-dim) !important; }
 }
 
 [data-testid="stChatInput"] {
-    background-color: #ffffff !important;
+    background-color: var(--bg-surface) !important;
 }
 [data-testid="stChatInput"] textarea {
-    background-color: #ffffff !important;
-    color: #000000 !important;
+    background-color: var(--bg-surface) !important;
+    color: var(--text-white) !important;
 }
 [data-testid="stChatInput"] svg {
-    color: #ffffff !important;
+    color: var(--text-white) !important;
 }
 
 .ai-header h1 {
@@ -486,7 +486,7 @@ hr { border-color: var(--border-dim) !important; }
     font-weight: 900;
     margin: 0;
     letter-spacing: -0.05em;
-    color: #0f172a;
+    color: var(--text-white);
 }
 
 
