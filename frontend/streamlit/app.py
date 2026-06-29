@@ -240,6 +240,17 @@ html, body, [class*="css"] {
     border-color: var(--border-dim) !important;
 }
 
+/* ── Expanders ── */
+[data-testid="stExpander"] {
+    background: var(--bg-surface) !important;
+    border-radius: 12px !important;
+    border: 1px solid var(--border-subtle) !important;
+}
+[data-testid="stExpander"] details summary p, [data-testid="stExpander"] details summary svg {
+    color: var(--text-white) !important;
+    font-weight: 600 !important;
+}
+
 /* ── Containers (Cards) ── */
 [data-testid="stVerticalBlockBorderWrapper"], .st-emotion-cache-12w0qpk {
     background: var(--bg-surface) !important;
@@ -503,6 +514,13 @@ hr { border-color: var(--border-dim) !important; }
 }
 [data-testid="stFileUploader"] * {
     color: var(--text-white) !important;
+}
+[data-testid="stFileUploader"] button {
+    background: var(--gradient-btn) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
 }
 
 [data-testid="stChatInput"] {
@@ -835,7 +853,7 @@ def doctor_dashboard():
             else:
                 st.error("Could not load.")
 
-        st.markdown("### Pending Requests")
+        st.markdown("<h3 style='color:var(--cyan); margin-bottom:15px; margin-top:0;'>⏳ Pending Requests</h3>", unsafe_allow_html=True)
         res = requests.get(f"{BASE_URL}/appointments/pending",
                            params={"doctor_email": st.session_state.user_email})
         if res.status_code == 200:
@@ -1225,7 +1243,7 @@ def main_app():
                             except: pass
 
         with col_right:
-            st.markdown("### 📄 Report Analysis")
+            st.markdown("<h3 style='color:var(--cyan); margin-bottom:15px; margin-top:0;'>📄 Report Analysis</h3>", unsafe_allow_html=True)
             report_file = st.file_uploader("Upload PDF or Image", type=["pdf", "jpg", "jpeg", "png"], label_visibility="collapsed")
             if st.button("Analyze Report", type="primary", use_container_width=True) and report_file:
                 with st.spinner("🔬 OCR Agent processing..."):
