@@ -20,6 +20,10 @@ def extract_text_from_image(image_path: str) -> str:
             model="gpt-4o-mini",
             messages=[
                 {
+                    "role": "system",
+                    "content": "You are a strict OCR machine. Your ONLY job is to extract text from the provided image. Do NOT converse. Do NOT apologize. If there is no text in the image, output EXACTLY the string 'NO_TEXT_FOUND'."
+                },
+                {
                     "role": "user",
                     "content": [
                         {"type": "text", "text": "Extract all the text from this image exactly as it appears."},
@@ -28,7 +32,10 @@ def extract_text_from_image(image_path: str) -> str:
                 }
             ]
         )
-        return response.choices[0].message.content
+        extracted = response.choices[0].message.content
+        if "NO_TEXT_FOUND" in extracted:
+            return ""
+        return extracted
     except Exception as e:
         return f"Error reading image: {e}"
 
