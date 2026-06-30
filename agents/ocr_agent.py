@@ -40,14 +40,42 @@ def extract_text_from_image(image_path: str) -> str:
         return f"Error reading image: {e}"
 
 def extract_text_from_pdf(pdf_path: str) -> str:
-    """PDF se text extract karne ka function using pypdf"""
+    """PDF se text extract karne ka function using pypdf, aur agar scanned (images) ho toh OpenAI Vision use karna"""
     try:
         text = ""
         reader = PdfReader(pdf_path)
         for page in reader.pages:
+            # 1. Try extracting standard text
             page_text = page.extract_text()
             if page_text:
                 text += page_text + "\n"
+                
+            # 2. Extract embedded images (for scanned PDFs) and send to OpenAI Vision
+            for image_file_object in page.images:
+                try:
+                    base64_image = base64.b64encode(image_file_object.data).decode('utf-8')
+                    response = client.chat.completions.create(
+                        model="gpt-4o-mini",
+                        messages=[
+                            {
+                                "role": "system",
+                                "content": "You are a strict OCR machine. Your ONLY job is to extract text from the provided image. Do NOT converse. Do NOT apologize. If there is no text in the image, output EXACTLY the string 'NO_TEXT_FOUND'."
+                            },
+                            {
+                                "role": "user",
+                                "content": [
+                                    {"type": "text", "text": "Extract all the text from this image exactly as it appears."},
+                                    {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
+                                ]
+                            }
+                        ]
+                    )
+                    extracted = response.choices[0].message.content
+                    if "NO_TEXT_FOUND" not in extracted:
+                        text += extracted + "\n"
+                except Exception as img_e:
+                    print(f"Error OCRing embedded image: {img_e}")
+                    
         return text
     except Exception as e:
         return f"Error reading PDF: {e}"
