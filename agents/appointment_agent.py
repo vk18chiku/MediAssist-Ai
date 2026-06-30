@@ -104,7 +104,7 @@ def book_appointment(state: dict):
 
     prompt = f"""
     You are an AI assistant helping to book medical appointments. 
-    Review the CONVERSATION HISTORY and identify which of these 3 details are currently known:
+    Review the CONVERSATION HISTORY and silently identify which of these 3 details are currently known (do not list them out to the user):
     1. Doctor's Name
     2. Date
     3. Time
@@ -114,14 +114,13 @@ def book_appointment(state: dict):
     INSTRUCTIONS:
     - Carefully extract the Doctor's Name, Date, and Time if they are mentioned by the user. Match doctor names flexibly (e.g., 'dr shambhu' matches 'Dr. Shambhu').
     - If the user has NOT specified a doctor (or the doctor is not in the list), list the AVAILABLE DOCTORS and ask which one they want to book with.
-    - If the user HAS specified a doctor, but NOT a Date, ask them for their preferred Date.
-    - If the user HAS specified a doctor and a Date, but NOT a Time, ask them for their preferred Time.
+    - If the user HAS specified a doctor, but is missing EITHER the Date OR the Time (or both), ask them for BOTH their preferred Date and Time together in a single polite question (e.g. "What date and time would you prefer?").
     - NEVER guess or invent a Date or Time. You must ask the user.
 
     IF AND ONLY IF the user has explicitly provided ALL 3 details (Doctor, Date, Time), then reply with EXACTLY this single line and nothing else:
     SUCCESS | [Doctor Name] | [Date] | [Time]
 
-    If any detail is missing, reply with a short, polite question to ask the user for the NEXT missing detail.
+    If any detail is missing, reply with a short, polite question to ask the user for the missing details. Do not list out what is known.
 
     CONVERSATION HISTORY:
     {user_message}
