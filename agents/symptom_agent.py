@@ -54,22 +54,27 @@ def run_symptom_checker(symptoms: str, needs_recommendation: bool = False) -> st
     Sath hi recommended doctor aur available doctors ki list deta hai.
     """
     if needs_recommendation:
-        rule_2 = (
-            "CRITICAL RULE 2: Because the user is asking for a doctor recommendation, YOU MUST FIRST briefly answer their question or explain which disease/symptom corresponds to which specialist (1-2 sentences). "
-            "Then, at the very end of your entire response, output EXACTLY this format on a new line: 'RECOMMENDED_SPECIALIST: [Specialization]', "
-            "where [Specialization] is ONE specific type of doctor best suited for this (e.g., General Physician, Cardiologist, Orthopedic, Pediatrician, Dermatologist)."
+        system_instruction = (
+            "You are an empathetic medical AI assistant. The user is asking for a doctor recommendation. "
+            "Provide a VERY BRIEF explanation (just 1 or 2 sentences max) answering their query or explaining which specialist they need. "
+            "Do NOT write a detailed list of possible causes or symptoms. "
+            "CRITICAL RULE: At the very end of your response, output EXACTLY this format on a new line: 'RECOMMENDED_SPECIALIST: [Specialization]', "
+            "where [Specialization] is EXACTLY ONE specific type of doctor (e.g., General Physician, Cardiologist, Dermatologist). Do NOT output multiple specialists."
         )
     else:
-        rule_2 = "Do NOT recommend any specific doctor or output 'RECOMMENDED_SPECIALIST'."
+        system_instruction = (
+            "You are an empathetic medical AI assistant. "
+            "Given a list of symptoms or a medical condition, provide a detailed, easy-to-understand explanation of possible common causes. "
+            "Use clear bullet points and keep a comforting tone. "
+            "CRITICAL RULE: Do NOT recommend any specific doctor or output 'RECOMMENDED_SPECIALIST'."
+        )
 
     prompt = ChatPromptTemplate.from_messages([
         (
             "system", 
-            "You are an empathetic, helpful, and responsible medical AI assistant. "
-            "Given a list of symptoms or a medical condition, provide a detailed, easy-to-understand explanation of possible common causes. "
-            "Use clear bullet points and keep a comforting tone. "
-            "CRITICAL RULE 1: ALWAYS include a strong disclaimer at the end stating that you are an AI, "
-            f"this is not medical advice, and the user MUST consult a real doctor for an accurate diagnosis.\n{rule_2}"
+            f"{system_instruction}\n\n"
+            "ALWAYS include a strong disclaimer at the end stating that you are an AI, "
+            "this is not medical advice, and the user MUST consult a real doctor for an accurate diagnosis."
         ),
         ("user", "Symptoms/Query: {symptoms}")
     ])
