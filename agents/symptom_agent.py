@@ -61,8 +61,8 @@ def run_symptom_checker(symptoms: str) -> str:
             "Use clear bullet points. "
             "CRITICAL RULE 1: ALWAYS include a strong disclaimer at the end stating that you are an AI, "
             "this is not medical advice, and the user MUST consult a real doctor for an accurate diagnosis.\n"
-            "CRITICAL RULE 2: At the very end of your entire response, output EXACTLY this format on a new line: 'RECOMMENDED_SPECIALIST: [Specialization]', "
-            "where [Specialization] is ONE specific type of doctor best suited for this (e.g., General Physician, Cardiologist, Orthopedic, Pediatrician, Dermatologist)."
+            "CRITICAL RULE 2: IF AND ONLY IF the user explicitly asks for a doctor recommendation or asks which doctor to consult, output EXACTLY this format on a new line at the very end of your entire response: 'RECOMMENDED_SPECIALIST: [Specialization]', "
+            "where [Specialization] is ONE specific type of doctor (e.g., Cardiologist, Orthopedic). Do NOT output this line if they just ask about a disease or symptom."
         ),
         ("user", "Symptoms/Query: {symptoms}")
     ])
