@@ -48,11 +48,19 @@ def get_doctors_by_specialization(specialization: str):
     finally:
         db.close()
 
-def run_symptom_checker(symptoms: str) -> str:
+def run_symptom_checker(symptoms: str, needs_recommendation: bool = False) -> str:
     """
     Yeh function symptoms input leta hai aur OpenAI se possible causes nikal kar deta hai.
     Sath hi recommended doctor aur available doctors ki list deta hai.
     """
+    if needs_recommendation:
+        rule_2 = (
+            "CRITICAL RULE 2: At the very end of your entire response, output EXACTLY this format on a new line: 'RECOMMENDED_SPECIALIST: [Specialization]', "
+            "where [Specialization] is ONE specific type of doctor best suited for this (e.g., General Physician, Cardiologist, Orthopedic, Pediatrician, Dermatologist)."
+        )
+    else:
+        rule_2 = "Do NOT recommend any specific doctor or output 'RECOMMENDED_SPECIALIST'."
+
     prompt = ChatPromptTemplate.from_messages([
         (
             "system", 
@@ -60,9 +68,7 @@ def run_symptom_checker(symptoms: str) -> str:
             "Given a list of symptoms or a medical condition, provide a few possible common causes or an explanation. "
             "Use clear bullet points. "
             "CRITICAL RULE 1: ALWAYS include a strong disclaimer at the end stating that you are an AI, "
-            "this is not medical advice, and the user MUST consult a real doctor for an accurate diagnosis.\n"
-            "CRITICAL RULE 2: IF AND ONLY IF the user explicitly asks for a doctor recommendation or asks which doctor to consult, output EXACTLY this format on a new line at the very end of your entire response: 'RECOMMENDED_SPECIALIST: [Specialization]', "
-            "where [Specialization] is ONE specific type of doctor (e.g., Cardiologist, Orthopedic). Do NOT output this line if they just ask about a disease or symptom."
+            f"this is not medical advice, and the user MUST consult a real doctor for an accurate diagnosis.\n{rule_2}"
         ),
         ("user", "Symptoms/Query: {symptoms}")
     ])

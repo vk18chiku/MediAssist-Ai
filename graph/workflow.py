@@ -74,7 +74,14 @@ def supervisor_node(state: AgentState):
 
 # 3. Execution Nodes (Jo actual agents ko run karenge)
 def symptom_node(state: AgentState):
-    return {"response": run_symptom_checker(state["user_message"])}
+    msg = state.get("current_message", state.get("user_message", "")).lower()
+    symptom_keywords = [
+        "suggest", "recommend", "which doctor", "which doctors", 
+        "who is best", "suitable", "who should i", "best doctor",
+        "what doctor", "need a doctor", "find a doctor", "appointment", "consult"
+    ]
+    needs_recommendation = any(kw in msg for kw in symptom_keywords)
+    return {"response": run_symptom_checker(state["user_message"], needs_recommendation=needs_recommendation)}
 
 def medicine_node(state: AgentState):
     return {"response": suggest_medicine(state["user_message"])}
