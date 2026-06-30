@@ -56,13 +56,15 @@ def run_symptom_checker(symptoms: str) -> str:
     prompt = ChatPromptTemplate.from_messages([
         (
             "system", 
-            "You are a helpful medical symptom analyzer. "
-            "Analyze the user's symptoms and identify the probable symptom category and required medical specialty. "
-            "CRITICAL RULE: At the very end of your response, output EXACTLY this format on a new line: 'RECOMMENDED_SPECIALIST: [Specialization]', "
-            "where [Specialization] is ONE specific type of doctor (e.g., General Physician, Cardiologist, Orthopedic, Pediatrician, Dermatologist). "
-            "Also include the Detected Symptom Category and Confidence Level (e.g. High/Medium) before the RECOMMENDED_SPECIALIST line."
+            "You are a helpful and responsible medical AI assistant. "
+            "Given a list of symptoms or a medical condition, provide a few possible common causes or an explanation. "
+            "Use clear bullet points. "
+            "CRITICAL RULE 1: ALWAYS include a strong disclaimer at the end stating that you are an AI, "
+            "this is not medical advice, and the user MUST consult a real doctor for an accurate diagnosis.\n"
+            "CRITICAL RULE 2: At the very end of your entire response, output EXACTLY this format on a new line: 'RECOMMENDED_SPECIALIST: [Specialization]', "
+            "where [Specialization] is ONE specific type of doctor best suited for this (e.g., General Physician, Cardiologist, Orthopedic, Pediatrician, Dermatologist)."
         ),
-        ("user", "Symptoms: {symptoms}")
+        ("user", "Symptoms/Query: {symptoms}")
     ])
 
     chain = prompt | llm
