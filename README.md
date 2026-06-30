@@ -1,3 +1,12 @@
+---
+title: MediAssist AI
+emoji: 🏥
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+pinned: false
+---
+
 # 🩺 MediAssist AI
 
 MediAssist AI is an advanced, AI-powered healthcare companion designed to bridge the gap between patients and medical information. Featuring a sleek, ChatGPT-inspired Dark Mode UI, it offers a seamless and intuitive experience for users to manage their health.
