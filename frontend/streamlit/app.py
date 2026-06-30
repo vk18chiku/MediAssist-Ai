@@ -42,16 +42,19 @@ if hasattr(st, "context") and hasattr(st.context, "cookies"):
     cookie_theme = _cookies.get('ui_theme')
 
 # Fallback to JS controller for older Streamlit versions (like localhost 1.35)
-if not cookie_token:
-    cookie_token = cookie_controller.get('auth_token')
-if not cookie_user:
-    cookie_user = cookie_controller.get('auth_user')
-if not cookie_email:
-    cookie_email = cookie_controller.get('auth_email')
-if not cookie_role:
-    cookie_role = cookie_controller.get('auth_role')
-if not cookie_theme:
-    cookie_theme = cookie_controller.get('ui_theme')
+try:
+    if not cookie_token:
+        cookie_token = cookie_controller.get('auth_token')
+    if not cookie_user:
+        cookie_user = cookie_controller.get('auth_user')
+    if not cookie_email:
+        cookie_email = cookie_controller.get('auth_email')
+    if not cookie_role:
+        cookie_role = cookie_controller.get('auth_role')
+    if not cookie_theme:
+        cookie_theme = cookie_controller.get('ui_theme')
+except Exception:
+    pass
 
 for key, default in defaults.items():
     if key not in st.session_state:
