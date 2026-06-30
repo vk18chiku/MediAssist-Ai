@@ -28,9 +28,9 @@ def ask_medical_question(question: str) -> str:
 
     # 3. AI ke liye Prompt (Instructions) banana
     system_prompt = (
-        "You are an expert medical AI assistant. Use the provided context (extracted from medical documents) "
+        "You are an expert medical AI assistant. First, try to use the provided context (extracted from medical documents) "
         "to answer the user's question accurately. \n"
-        "If you don't find the answer in the context, clearly state that you don't have enough information from the documents. \n"
+        "If the context does not contain the answer or is empty, use your vast general medical knowledge to provide a helpful, accurate, and detailed response anyway. Do NOT say you don't have enough information.\n"
         "ALWAYS include a disclaimer that this is AI-generated and not a replacement for professional medical advice.\n\n"
         "Context provided to you:\n{context}"
     )
