@@ -35,6 +35,8 @@ class AgentState(TypedDict):
     agent_type: str
     response: str
 
+import re
+
 # 2. Supervisor Node (Yeh decide karega kis agent ko bulana hai)
 def supervisor_node(state: AgentState):
     # Use current_message if provided, fallback to user_message
@@ -46,11 +48,7 @@ def supervisor_node(state: AgentState):
         return {"agent_type": "appointment"}
     
     # 2. Hardcoded Route: If user asks for doctor suggestions, force route to symptom agent
-    symptom_keywords = [
-        "suggest doctor", "recommend doctor", "which doctor", "which doctors", 
-        "who is best", "suitable doctor", "who should i consult", "best doctor"
-    ]
-    if any(keyword in msg_to_analyze for keyword in symptom_keywords):
+    if re.search(r'\b(suggest|recommend|which|best|need|find|suitable)\b.*\b(doctor|specialist)\b', msg_to_analyze):
         return {"agent_type": "symptom"}
         
     # 3. Hardcoded Route: If user asks for medicine
@@ -80,13 +78,7 @@ def supervisor_node(state: AgentState):
 # 3. Execution Nodes (Jo actual agents ko run karenge)
 def symptom_node(state: AgentState):
     msg = state.get("current_message", state.get("user_message", "")).lower()
-    symptom_keywords = [
-        "suggest doctor", "recommend doctor", "which doctor", "which doctors", 
-        "who is best", "suitable doctor", "who should i consult", "best doctor",
-        "what doctor", "need a doctor", "find a doctor", "appointment", "consult",
-        "suggest me doctor", "recommend a doctor"
-    ]
-    needs_recommendation = any(kw in msg for kw in symptom_keywords)
+    needs_recommendation = bool(re.search(r'\b(suggest|recommend|which|best|need|find|suitable|appointment|consult)\b.*\b(doctor|specialist)\b', msg))
     return {"response": run_symptom_checker(state["user_message"], needs_recommendation=needs_recommendation)}
 
 def medicine_node(state: AgentState):
