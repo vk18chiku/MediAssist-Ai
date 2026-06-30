@@ -55,7 +55,7 @@ def run_symptom_checker(symptoms: str, needs_recommendation: bool = False) -> st
     """
     if needs_recommendation:
         rule_2 = (
-            "CRITICAL RULE 2: At the very end of your entire response, output EXACTLY this format on a new line: 'RECOMMENDED_SPECIALIST: [Specialization]', "
+            "CRITICAL RULE 2: Because the user explicitly asked for a doctor recommendation, KEEP YOUR MEDICAL EXPLANATION EXTREMELY BRIEF (just 1 or 2 sentences max) and do NOT write a long detailed list of causes. Then, at the very end of your entire response, output EXACTLY this format on a new line: 'RECOMMENDED_SPECIALIST: [Specialization]', "
             "where [Specialization] is ONE specific type of doctor best suited for this (e.g., General Physician, Cardiologist, Orthopedic, Pediatrician, Dermatologist)."
         )
     else:

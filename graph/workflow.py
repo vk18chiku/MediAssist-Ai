@@ -47,11 +47,16 @@ def supervisor_node(state: AgentState):
     
     # 2. Hardcoded Route: If user asks for doctor suggestions, force route to symptom agent
     symptom_keywords = [
-        "suggest", "recommend", "which doctor", "which doctors", 
-        "who is best", "suitable", "who should i", "best doctor"
+        "suggest doctor", "recommend doctor", "which doctor", "which doctors", 
+        "who is best", "suitable doctor", "who should i consult", "best doctor"
     ]
     if any(keyword in msg_to_analyze for keyword in symptom_keywords):
         return {"agent_type": "symptom"}
+        
+    # 3. Hardcoded Route: If user asks for medicine
+    medicine_keywords = ["medicine", "tablet", "pill", "syrup", "remedy"]
+    if any(keyword in msg_to_analyze for keyword in medicine_keywords):
+        return {"agent_type": "medicine"}
 
     prompt = ChatPromptTemplate.from_messages([
         ("system", "You are a Routing Supervisor. Analyze the user's CURRENT message and classify their intent into EXACTLY ONE of these categories:\n"
@@ -76,9 +81,10 @@ def supervisor_node(state: AgentState):
 def symptom_node(state: AgentState):
     msg = state.get("current_message", state.get("user_message", "")).lower()
     symptom_keywords = [
-        "suggest", "recommend", "which doctor", "which doctors", 
-        "who is best", "suitable", "who should i", "best doctor",
-        "what doctor", "need a doctor", "find a doctor", "appointment", "consult"
+        "suggest doctor", "recommend doctor", "which doctor", "which doctors", 
+        "who is best", "suitable doctor", "who should i consult", "best doctor",
+        "what doctor", "need a doctor", "find a doctor", "appointment", "consult",
+        "suggest me doctor", "recommend a doctor"
     ]
     needs_recommendation = any(kw in msg for kw in symptom_keywords)
     return {"response": run_symptom_checker(state["user_message"], needs_recommendation=needs_recommendation)}
