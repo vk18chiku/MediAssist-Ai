@@ -9,10 +9,7 @@ import time
 st.set_page_config(page_title="MediAssist AI", page_icon="🧠", layout="wide", initial_sidebar_state="expanded")
 
 # --- API Configuration ---
-if platform.system() == "Windows":
-    BASE_URL = "http://localhost:8000"
-else:
-    BASE_URL = os.environ.get("BACKEND_URL", "http://mediassist_backend:8000")
+BASE_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
 
 if BASE_URL.endswith("/"):
     BASE_URL = BASE_URL[:-1]
