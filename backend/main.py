@@ -126,7 +126,7 @@ def chat_with_ai(req: ChatRequest, db: Session = Depends(get_db)):
         history_str += f"{m['role'].capitalize()}: {content}\n"
 
     msg_with_details = f"[Patient Name: {req.user_name}]\n[Patient Email: {req.user_email}]\n\n--- CONVERSATION HISTORY ---\n{history_str}"
-    result = langgraph_app.invoke({"user_message": msg_with_details})
+    result = langgraph_app.invoke({"user_message": msg_with_details, "current_message": req.message})
     
     ai_response = result["response"]
     

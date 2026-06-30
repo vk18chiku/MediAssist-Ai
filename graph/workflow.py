@@ -8,8 +8,11 @@ from dotenv import load_dotenv
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Fix Windows console encoding for emojis
-if sys.stdout.encoding.lower() != 'utf-8':
-    sys.stdout.reconfigure(encoding='utf-8')
+if getattr(sys.stdout, 'encoding', None) and sys.stdout.encoding.lower() != 'utf-8':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
@@ -28,22 +31,40 @@ llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
 # 1. State Define Karna (Data jo agents ke beech ghumega)
 class AgentState(TypedDict):
     user_message: str
+    current_message: str
     agent_type: str
     response: str
 
 # 2. Supervisor Node (Yeh decide karega kis agent ko bulana hai)
 def supervisor_node(state: AgentState):
+    # Use current_message if provided, fallback to user_message
+    msg_to_analyze = state.get("current_message", state.get("user_message", "")).lower()
+    
+    # 1. Hardcoded Route: If user mentions "Dr." or specific booking keywords, it goes to APPOINTMENT
+    appointment_keywords = ["dr.", "dr ", "doctor rahul", "doctor priya", "consult dr", "book with", "available doctors", "list doctors", "my doctors", "available doctor"]
+    if any(keyword in msg_to_analyze for keyword in appointment_keywords):
+        return {"agent_type": "appointment"}
+    
+    # 2. Hardcoded Route: If user asks for doctor suggestions, force route to symptom agent
+    symptom_keywords = [
+        "suggest", "recommend", "which doctor", "which doctors", 
+        "who is best", "suitable", "who should i", "best doctor"
+    ]
+    if any(keyword in msg_to_analyze for keyword in symptom_keywords):
+        return {"agent_type": "symptom"}
+
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "Analyze the user's medical query (look at the latest intent in the CONVERSATION HISTORY) and classify it into EXACTLY ONE of these categories:\n"
-                   "1. 'symptom' (If asking about symptoms, causes, or how they feel)\n"
+        ("system", "You are a Routing Supervisor. Analyze the user's CURRENT message and classify their intent into EXACTLY ONE of these categories:\n"
+                   "1. 'symptom' (If asking about symptoms, diseases, causes, OR if they need to know WHICH doctor to consult. E.g. 'I have chest pain', 'fever', 'skin rash')\n"
                    "2. 'medicine' (If asking for basic OTC medicine or quick remedies)\n"
-                   "3. 'appointment' (If asking to book a doctor, find a specialist, or if they are providing appointment details like time or date)\n"
+                   "3. 'appointment' (ONLY if explicitly selecting a doctor to book with, e.g. 'I want to consult Dr. Sharma'. NEVER select this for just asking for a recommendation.)\n"
                    "4. 'rag' (If asking general medical knowledge, diet, or guidelines from books)\n"
                    "Respond with ONLY the category word (e.g., symptom, medicine, appointment, rag)."),
-        ("human", "{user_message}")
+        ("human", "{current_message}")
     ])
     chain = prompt | llm
-    category = chain.invoke({"user_message": state["user_message"]}).content.strip().lower()
+    
+    category = chain.invoke({"current_message": state.get("current_message", state.get("user_message", ""))}).content.strip().lower()
     
     # Fallback agar AI ne kuch ajeeb output diya
     if category not in ["symptom", "medicine", "appointment", "rag"]:
